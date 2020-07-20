@@ -531,6 +531,15 @@ def threaded_client(conn, **kwargs):
                 acycle = kwargs.get('acycle')
                 cp.change_phase_duration(node_id, phase, duration, maxout, time, timeSta, acycle)
 
+            elif data == ac.INT_CHANGE_PHASE_DURATION_ACYCLE:
+                send_message(conn, in_format='i', values=(0,))
+                node_id, phase, duration = retrieve_message(conn, 'i i f')
+
+                time = kwargs.get('time')
+                timeSta = kwargs.get('timeSta')
+                acycle = kwargs.get('acycle')
+                cp.change_phase_duration_acycle(node_id, phase, duration, time, timeSta, acycle)
+
             elif data == ac.INT_GET_IN_EDGES:
                 send_message(conn, in_format='i', values=(0,))
                 node_id, = retrieve_message(conn, 'i')
@@ -556,8 +565,8 @@ def threaded_client(conn, **kwargs):
                 output = json.dumps(detector_list)
 
                 send_message(conn, in_format='str', values=(output,))
-            
-            elif data == ac.DET_GET_DETECTOR_LANES: #cj
+
+            elif data == ac.DET_GET_DETECTOR_LANES:  # cj
                 send_message(conn, in_format='i', values=(0,))
                 edge_id, = retrieve_message(conn, 'i')
 

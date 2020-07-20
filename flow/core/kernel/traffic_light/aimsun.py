@@ -189,6 +189,24 @@ class AimsunKernelTrafficLight(KernelTrafficLight):
         """
         return self.kernel_api.change_phase_duration(node_id, phase, duration, maxout)
 
+    def change_phase_duration_acycle(self, node_id, phase, duration):
+        """
+        Changes an intersection's phase to the next
+
+        Parameters
+        ----------
+        node_id : int
+            the node id of the intersection
+        duration: float
+            the new phase duration of the control plan
+
+        Returns
+        -------
+        int
+            change phase duration
+        """
+        return self.kernel_api.change_phase_duration_acycle(node_id, phase, duration)
+
     def get_detector_lanes(self, edge_id):
         """
         Gets the detector ids on an edge

@@ -136,6 +136,9 @@ INT_CHANGE_PHASE_DURATION = 0x29
 #: get duration phase
 INT_GET_DURATION_PHASE = 0x2B
 
+#: set intersection phase acyclical
+INT_CHANGE_PHASE_DURATION_ACYCLE = 0x30
+
 ###############################################################################
 #                           Detector Commands                            #
 ###############################################################################

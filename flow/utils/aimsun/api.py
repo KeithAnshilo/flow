@@ -786,9 +786,9 @@ class FlowAimsunAPI(object):
             the total green time of the intersection
         """
         control_cycle, = self._send_command(ac.INT_GET_CYCLE_LENGTH,
-                                          in_format='i i',
-                                          values=(node_id, control_id,),
-                                          out_format='f')
+                                            in_format='i i',
+                                            values=(node_id, control_id,),
+                                            out_format='f')
 
         return control_cycle
 
@@ -810,10 +810,31 @@ class FlowAimsunAPI(object):
         """
         self._send_command(ac.INT_CHANGE_PHASE_DURATION,
                            in_format='i i f f',
-                           values=(node_id, phase, duration,maxout,),
+                           values=(node_id, phase, duration, maxout,),
                            out_format=None)
 
-    def get_detector_lanes(self, edge_id): #cj
+    def change_phase_duration_acycle(self, node_id, phase, duration):
+        """
+        Changes the phase timing
+
+        Parameters
+        ----------
+        node_id : int
+            the node id of the intersection
+        duration : float
+            the new duration of the phases
+
+        Returns
+        -------
+        int
+            change of phase timing
+        """
+        self._send_command(ac.INT_CHANGE_PHASE_DURATION_ACYCLE,
+                           in_format='i i f',
+                           values=(node_id, phase, duration),
+                           out_format=None)
+
+    def get_detector_lanes(self, edge_id):  # cj
         """
         Gets the detector ids on an edge
 

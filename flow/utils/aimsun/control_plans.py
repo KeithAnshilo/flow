@@ -98,6 +98,7 @@ def change_offset(node_id, offset, time, timeSta, acycle):
             remaining_time += phase_time
         aapi.ECIChangeDirectPhase(node_id, target_phase, timeSta, time, acycle, phase_time - remaining_time)
 
+
 def get_cycle_length(node_id, control_id):
     node_id = node_id
     rep_name = str(aapi.ANGConnGetReplicationId())
@@ -131,7 +132,11 @@ def change_phase_duration(node_id, phase, duration, maxout, time, timeSta, acycl
     aapi.ECIChangeTimingPhase(node_id, phase, duration, timeSta)
     aapi.ECISetActuatedParamsMaxGreen(control_id, node_id, phase, maxout)
     #phase_duration, maxd, mind = get_duration_phase(node_id, phase, timeSta)
-    
+
+
+def change_phase_duration_acycle(node_id, phase, duration, time, timeSta, acycle):
+    control_id, _ = get_control_ids(node_id)
+    aapi.ECIChangeTimingPhase(node_id, phase, duration, timeSta)
 
 
 def phase_converter(phase_timings):
@@ -162,6 +167,7 @@ def get_incoming_edges(node_id):
 
     return [edge.getId() for edge in in_edges]
 
+
 def get_detector_lanes(edge_id):
     catalog = model.getCatalog()
     detector_lanes = {}
@@ -170,7 +176,7 @@ def get_detector_lanes(edge_id):
         if detector.IdSection == edge_id:
             if detector.IdLastLane - detector.IdFirstLane != 0:
                 num_lane = 2
-            else: 
+            else:
                 num_lane = 1
             detector_obj = catalog.find(detector.Id)
             try:
@@ -182,10 +188,9 @@ def get_detector_lanes(edge_id):
     return detector_lanes
 
 
-
 def get_detector_ids(edge_id):
     catalog = model.getCatalog()
-    detector_list = {"left": [], "right":[], "through":[],"advanced": []}
+    detector_list = {"left": [], "right": [], "through": [], "advanced": []}
     for i in range(aapi.AKIDetGetNumberDetectors()):
         detector = aapi.AKIDetGetPropertiesDetector(i)
         if detector.IdSection == edge_id:

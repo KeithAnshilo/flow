@@ -9,30 +9,35 @@ ADDITIONAL_ENV_PARAMS = {'target_nodes': [3344],
                          # 'observed_nodes': [3386, 3371, 3362, 3373],
                          'num_incoming_edges_per_node': 4,
                          'num_detector_types': 4,
-                         #'num_advanced': 1,
+                         # 'num_advanced': 1,
                          'num_measures': 2,
                          'detection_interval': (0, 15, 0),
                          'statistical_interval': (0, 15, 0),
-                         'replication_list': ['Replication 8050297', # 5-11
+                         'replication_list': ['Replication 8050297',  # 5-11
                                               'Replication 8050315',  # 10-14
                                               'Replication 8050322'
-                                            ]}  # 14-21
+                                              ]}  # 14-21
 # the replication list should be copied in load.py
 
-RLLIB_N_ROLLOUTS = 6  # copy from train_rllib.py
+RLLIB_N_ROLLOUTS = 3  # copy from train_rllib.py
 
 np.random.seed(1234567890)
 
-def rescale_phase_pair(array, NewMin, NewMax):
-    rescaled_action = []
-    OldMin = 0
-    OldMax = 86
-    OldRange = (OldMax - OldMin)  
-    NewRange = (NewMax - NewMin)
-    for OldValue in array:
-        NewValue = (((OldValue - OldMin) * NewRange) / OldRange) + NewMin
-        rescaled_action.append(NewValue)
-    return rescaled_action
+
+def rescale(actions_array, target_value, current_value):
+    rescaled_actions = []
+    target_value = round(target_value)
+    for duration in actions_array:
+        if current_value == 0:
+            new_action = 0
+        else:
+            new_action = math.ceil(target_value*duration/current_value)
+        rescaled_actions.append(new_action)
+    if sum(rescaled_actions) > target_value:
+        x = sum(rescaled_actions) - target_value
+        rescaled_actions[-1] = rescaled_actions[-1] - x
+    return rescaled_actions
+
 
 class SingleLightEnv(Env):
     def __init__(self, env_params, sim_params, network, simulator='aimsun'):
@@ -54,7 +59,6 @@ class SingleLightEnv(Env):
         self.target_nodes = env_params.additional_params["target_nodes"]
         self.cycle = 0
         self.max_duration = 60
-        self.minimum_green = 5
         self.sum_interphase = 18
 
         # reset_phase_durations
@@ -72,8 +76,8 @@ class SingleLightEnv(Env):
 
         # hardcode maxout values maxd_dict = {'control_id':'phase_maxout'}
         self.maxd_dict = {}
-        self.maxd_dict.update(dict.fromkeys([0,1,5], [23, 42, 23, 42, 23, 42, 23, 42]))
-        self.maxd_dict.update(dict.fromkeys([2,3,4], [28, 62, 28, 62, 28, 62, 28, 62]))   
+        self.maxd_dict.update(dict.fromkeys([0, 1, 5], [23, 42, 23, 42, 23, 42, 23, 42]))
+        self.maxd_dict.update(dict.fromkeys([2, 3, 4], [28, 62, 28, 62, 28, 62, 28, 62]))
         # get cumulative queue lengths
         for node_id in self.target_nodes:
             self.node_id = node_id
@@ -85,18 +89,17 @@ class SingleLightEnv(Env):
                 right = detector_dict['right']
                 left = detector_dict['left']
                 advanced = detector_dict['advanced']
-                type_map = {"through":through, "right":right, "left": left, "advanced": advanced}
+                type_map = {"through": through, "right": right, "left": left, "advanced": advanced}
 
                 detector_lane = self.k.traffic_light.get_detector_lanes(edge_id)
-                for _, (d_id,lane) in enumerate(detector_lane.items()):
+                for _, (d_id, lane) in enumerate(detector_lane.items()):
                     self.detector_lane[d_id] = lane
                 self.edge_detector_dict[node_id][edge_id] = type_map
                 self.past_cumul_queue[edge_id] = 0
 
             # get control_id and # of rings
-            print(self.edge_detector_dict)
+            print(self.detector_lane)
             self.control_id, self.num_rings = self.k.traffic_light.get_control_ids(node_id)
-            self.cur_control_id = self.control_id
             # print(node_id, self.control_id, self.num_rings)
 
             for ring_id in range(0, self.num_rings):
@@ -113,7 +116,7 @@ class SingleLightEnv(Env):
         for node_id in self.target_nodes:
             for phase in self.observed_phases:
                 phase_duration, maxd, mind = self.k.traffic_light.get_duration_phase(node_id, phase)
-                #self.k.traffic_light.change_phase_duration(node_id, phase, phase_duration)
+                # self.k.traffic_light.change_phase_duration(node_id, phase, phase_duration)
                 print('initial phase: {} duration: {} max: {} min: {}'.format(phase, phase_duration, maxd, mind))
             self.cycle = self.k.traffic_light.get_cycle_length(node_id, self.control_id)
             print('cycle_length: {}'.format(self.cycle))
@@ -123,7 +126,7 @@ class SingleLightEnv(Env):
     @property
     def action_space(self):
         """See class definition."""
-        return Tuple(5 * (Discrete(86, ),))
+        return Tuple(8 * (Discrete(70, ),))
 
     @property
     def observation_space(self):
@@ -134,65 +137,36 @@ class SingleLightEnv(Env):
         return Box(low=0, high=30, shape=(shape, ), dtype=np.float32)
 
     def _apply_rl_actions(self, rl_actions):
+        min_green_turn = 5
+        max_green_turn = 30
+        min_green_through = 15
+
         if self.ignore_policy:
-            #print('self.ignore_policy is True')
+            print('self.ignore_policy is True')
             return
-        self.control_id, self.num_rings = self.k.traffic_light.get_control_ids(self.node_id)
-        self.cycle = self.k.traffic_light.get_cycle_length(self.node_id, self.control_id)
-        cycle = self.cycle - self.sum_interphase
-        default_actions = np.array(rl_actions).flatten()
-        """actions = rescale_linear(default_actions, self.minimum_green, self.max_duration)
-        prob_phase = np.array([[actions[0], actions[1]], [actions[2], actions[3]]]) / 70
-        prob_barrier = [(actions[-1]/70), 1 - (actions[-1]/ 70)]
-        sum_barrier = [round(prob_barrier[0]*cycle), round(prob_barrier[1]*cycle)]
-        actionf = []""" # new code for minimum green set to 5
-        actions = np.round(rescale_phase_pair(default_actions, 14, 100))
-        # gives percentage for each phase pair
-        prob_barrier = [actions[-1]/113, 1 - (actions[-1]/113)]
-        sum_barrier = [round(prob_barrier[0]*cycle), round(prob_barrier[1]*cycle)]
-        prob_phase = np.array([[actions[0], actions[1]], [actions[2], actions[3]]]) / 113
-        # gives the length of barriers
-        actionf = []  
-        maxd_list = self.maxd_dict[self.control_id]
-        #print(maxd_list)
 
-        ### probability
-        for i in range(len(prob_phase)): # [[0,1],[2,3]]
-            ring = prob_phase[i] # [0,1]
-            for j in range(len(ring)):
-                new_phase1, new_phase2 = round(ring[j]*sum_barrier[j]), sum_barrier[j] - round(ring[j]*sum_barrier[j])
-                if new_phase1 < 5:
-                    new_phase1 = 5
-                    new_phase2 = sum_barrier[j] - new_phase1
-                elif new_phase2 < 5:
-                    new_phase2 = 5
-                    new_phase1 = sum_barrier[j] - new_phase2
-                phase_pair = [new_phase1, new_phase2]
-                actionf.append(phase_pair)
+        actions = np.array(rl_actions).flatten()
 
-        """for i in range(len(prob_phase)): # [[0,1],[2,3]]
-            ring = prob_phase[i] # [0,1]
-            for j in range(len(ring)):
-                new_phased = round(ring[j]*sum_barrier[j])
-                phase_pair = [new_phased, sum_barrier[j] - new_phased]
-                actionf.append(phase_pair)"""
+        turn_minphase_ring1 = min_green_turn if actions[0] <= 5 else actions[0]  # set min green for phase 1
+        turn_minphase_ring9 = min_green_turn if actions[1] <= 5 else actions[1]  # set min green for phase 9
+        turn_minphase_ring5 = min_green_turn if actions[4] <= 5 else actions[4]  # set min green for phase 5
+        turn_minphase_ring13 = min_green_turn if actions[5] <= 5 else actions[5]  # set min green for phase 13
 
-        new_actions = np.array(actionf).flatten()
-        phase_list = self.observed_phases
-        for phase, action, maxd in zip(phase_list, new_actions, maxd_list):
+        phase_actions = [max_green_turn if actions[0] >= 30 else turn_minphase_ring1,  # Phase 1
+                         max_green_turn if actions[1] >= 30 else turn_minphase_ring9,  # Phase 9
+                         min_green_through if actions[2] <= 15 else actions[2],  # Phase 3
+                         min_green_through if actions[3] <= 15 else actions[3],  # Phase 11
+                         max_green_turn if actions[4] >= 30 else turn_minphase_ring5,  # Phase 5
+                         max_green_turn if actions[5] >= 30 else turn_minphase_ring13,  # Phase 13
+                         min_green_through if actions[6] <= 15 else actions[6],  # Phase 7
+                         min_green_through if actions[7] <= 15 else actions[7]]  # Phase 15
+
+        phase_order = [1, 9, 3, 11, 5, 13, 7, 15]
+
+        for phase, action in zip(phase_order, phase_actions):
             if action:
-                if action > maxd:
-                    maxout = action
-                else:
-                    maxout = maxd
-                self.k.traffic_light.change_phase_duration(self.node_id, phase, action, maxout)
-                phase_duration, maxd, _ = self.k.traffic_light.get_duration_phase(self.node_id, phase)
-                #print(phase, action, phase_duration, maxd)
-        # print('13, 57, 911, 1315: {} {} {} {}'.format(sum(new_actions[0:2]), sum(
-        #    new_actions[2:4]), sum(new_actions[4:6]), sum(new_actions[6:8])))
-
-        self.current_phase_timings = new_actions
-        self.sum_barrier = [sum(new_actions[0:2]), sum(new_actions[2:4])]
+                self.k.traffic_light.change_phase_duration_acycle(self.node_id, phase, action)
+        self.current_phase_timings = phase_actions
 
     def get_state(self, rl_id=None, **kwargs):
         """See class definition."""
@@ -207,66 +181,54 @@ class SingleLightEnv(Env):
 
         shape = (num_nodes, num_edges, num_detectors_types, num_measures)
         state = np.zeros(shape)
-        for i, (node,edge) in enumerate(self.edge_detector_dict.items()):
+        for i, (node, edge) in enumerate(self.edge_detector_dict.items()):
             for j, (edge_id, detector_info) in enumerate(edge.items()):
                 for k, (detector_type, detector_ids) in enumerate(detector_info.items()):
                     if detector_type == 'through':
-                        index = (i,j,0)
-                        flow, occup = 0, []
+                        index = (i, j, 0)
+                        flow, occup = 0, 0
                         for detector in detector_ids:
                             count, occupancy = self.k.traffic_light.get_detector_count_and_occupancy(int(detector))
                             flow += (count/self.detection_interval)/(normal/3600)
-                            occup.append(occupancy)
+                            occup += occupancy
                         state[(*index, 0)] = flow
-                        try:
-                            state[(*index, 1)] = sum(occup)/len(occup) # mean
-                        except ZeroDivisionError:
-                            state[(*index, 1)] = 0
+                        state[(*index, 1)] = occup
                     elif detector_type == 'right':
-                        index = (i,j,1)
-                        flow, occup = 0, []
+                        index = (i, j, 1)
+                        flow, occup = 0, 0
                         for detector in detector_ids:
                             count, occupancy = self.k.traffic_light.get_detector_count_and_occupancy(int(detector))
                             flow += (count/self.detection_interval)/(normal/3600)
-                            occup.append(occupancy)
+                            occup += occupancy
                         state[(*index, 0)] = flow
-                        try:
-                            state[(*index, 1)] = sum(occup)/len(occup) # mean
-                        except ZeroDivisionError:
-                            state[(*index, 1)] = 0
+                        state[(*index, 1)] = occup
                     elif detector_type == 'left':
-                        index = (i,j,2)
-                        flow, occup = 0, []
+                        index = (i, j, 2)
+                        flow, occup = 0, 0
                         for detector in detector_ids:
                             count, occupancy = self.k.traffic_light.get_detector_count_and_occupancy(int(detector))
                             flow += (count/self.detection_interval)/(normal/3600)
-                            occup.append(occupancy)
+                            occup += occupancy
                         state[(*index, 0)] = flow
-                        try:
-                            state[(*index, 1)] = sum(occup)/len(occup)
-                        except ZeroDivisionError:
-                            state[(*index, 1)] = 0
+                        state[(*index, 1)] = occup
                     elif detector_type == 'advanced':
-                        index = (i,j,3)
-                        flow, occup = 0, []
+                        index = (i, j, 3)
+                        flow, occup = 0, 0
                         for detector in detector_ids:
                             count, occupancy = self.k.traffic_light.get_detector_count_and_occupancy(int(detector))
                             flow += (count/self.detection_interval)/(normal/3600)
-                            occup.append(occupancy)
+                            occup += occupancy
                         state[(*index, 0)] = flow
-                        try:
-                            state[(*index, 1)] = sum(occup)/len(occup)
-                        except ZeroDivisionError:
-                            state[(*index, 1)] = 0
-        #print(state)
+                        state[(*index, 1)] = occup
+        # print(state)
         return state.flatten()
 
     def compute_reward(self, rl_actions, **kwargs):
         """Computes the sum of queue lengths at all intersections in the network."""
         reward = 0
         slope = []
-        
-        for i, (node,edge) in enumerate(self.edge_detector_dict.items()):
+
+        for i, (node, edge) in enumerate(self.edge_detector_dict.items()):
             for j, (section, detector) in enumerate(edge.items()):
                 for k, (d_type, d_ids) in enumerate(detector.items()):
                     for d_id in d_ids:
@@ -277,24 +239,14 @@ class SingleLightEnv(Env):
                             slope.append(((flow/num_lane)/occupancy))
                         else:
                             continue
-        #sum_slope = sum(map(lambda i : i * i, slope)) 
-        sum_slope = sum(slope)
-        #print(sum_slope)
+        # print(slope)
+        sum_slope = sum(map(lambda i: i * i, slope))
+        # print(sum_slope)
         reward = (sum_slope)
-        
-        """for section_id in self.past_cumul_queue:
-            current_cumul_queue = self.k.traffic_light.get_cumulative_queue_length(section_id)
-            queue = current_cumul_queue - self.past_cumul_queue[section_id]
-            self.past_cumul_queue[section_id] = current_cumul_queue
 
-            # reward is negative queues
-            reward -= (queue**2) * 100"""
+        print(f'{self.k.simulation.time:.0f}', '\t', f'{reward:.2f}', '\t',
+              self.current_phase_timings, '\t', sum(self.current_phase_timings)+18, self.sum_barrier)
 
-        print(f'{self.k.simulation.time:.0f}', '\t', f'{reward:.2f}', '\t', self.control_id, '\t',
-              self.current_phase_timings[0],'\t', self.current_phase_timings[1],'\t', self.current_phase_timings[2],'\t', 
-              self.current_phase_timings[3],'\t', self.current_phase_timings[4],'\t', self.current_phase_timings[5],'\t', 
-              self.current_phase_timings[6],'\t', self.current_phase_timings[7],'\t', sum(self.current_phase_timings[4:])+18, self.sum_barrier)
-        
         # print(self.phase_array)
         # print(self.maxd_list)
 
@@ -330,9 +282,10 @@ class SingleLightEnv(Env):
 
         # compute the info for each agent
         infos = {}
+
         # get control_id for every step
-        #self.control_id, self.num_rings = self.k.traffic_light.get_control_ids(self.node_id) #july13
-        #self.cycle = self.k.traffic_light.get_cycle_length(self.node_id, self.control_id)
+        # self.control_id, self.num_rings = self.k.traffic_light.get_control_ids(self.node_id)
+        # self.cycle = self.k.traffic_light.get_cycle_length(self.node_id, self.control_id)
 
         # compute the reward
         reward = self.compute_reward(rl_actions)
@@ -364,6 +317,8 @@ class SingleLightEnv(Env):
         self.current_phase_timings = np.zeros(int(len(self.observed_phases)))
         for section_id in self.past_cumul_queue:
             self.past_cumul_queue[section_id] = 0
+
+        # self.total_green = self.k.traffic_light.get_total_green(self.node_id)
 
         # perform the generic reset function
         observation = super().reset()
