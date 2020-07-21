@@ -12,6 +12,14 @@ def get_intersection_offset(node_id):
     return aapi.ECIGetOffset(node_id)
 
 
+def get_globaledge_stoptime(section_id):
+    vehTypePos = 0
+    estad = aapi.AKIEstGetGlobalStatisticsSection(section_id, vehTypePos)
+    edge_flow = estad.STa
+
+    return edge_flow
+
+
 def get_cumulative_queue_length(section_id):
     catalog = model.getCatalog()
     section = catalog.find(section_id)

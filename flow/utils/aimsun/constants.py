@@ -139,6 +139,9 @@ INT_GET_DURATION_PHASE = 0x2B
 #: set intersection phase acyclical
 INT_CHANGE_PHASE_DURATION_ACYCLE = 0x30
 
+# get edge_flow
+INT_GET_EDGE_ST = 0x31
+
 ###############################################################################
 #                           Detector Commands                            #
 ###############################################################################

@@ -226,29 +226,14 @@ class SingleLightEnv(Env):
     def compute_reward(self, rl_actions, **kwargs):
         """Computes the sum of queue lengths at all intersections in the network."""
         reward = 0
-        slope = []
-
-        for i, (node, edge) in enumerate(self.edge_detector_dict.items()):
-            for j, (section, detector) in enumerate(edge.items()):
-                for k, (d_type, d_ids) in enumerate(detector.items()):
-                    for d_id in d_ids:
-                        count, occupancy = self.k.traffic_light.get_detector_count_and_occupancy(d_id)
-                        flow = (count/self.detection_interval)
-                        if occupancy != 0:
-                            num_lane = self.detector_lane[str(d_id)]
-                            slope.append(((flow/num_lane)/occupancy))
-                        else:
-                            continue
-        # print(slope)
-        sum_slope = sum(map(lambda i: i * i, slope))
-        # print(sum_slope)
-        reward = (sum_slope)
+        entrance_edge = [22211,568,22208,400]
+        
+        for section_id in entrance_edge:
+            edge_flow = self.k.traffic_light.get_globaledge_stoptime(section_id)
+            reward -= (edge_flow**2)
 
         print(f'{self.k.simulation.time:.0f}', '\t', f'{reward:.2f}', '\t',
               self.current_phase_timings, '\t', sum(self.current_phase_timings)+18, self.sum_barrier)
-
-        # print(self.phase_array)
-        # print(self.maxd_list)
 
         return reward
 

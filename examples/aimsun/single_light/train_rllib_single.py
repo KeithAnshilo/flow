@@ -73,25 +73,25 @@ def setup_exps(version=0):
 
     """
 
-    alg_run = "APPO"
+    alg_run = "PPO"
 
     agent_cls = get_agent_class(alg_run)
     config = agent_cls._default_config.copy()
     config["num_workers"] = RLLIB_N_CPUS
-    config["num_gpus"] = 0
-    # config["sgd_minibatch_size"] = RLLIB_HORIZON #notincluded in APPO
-    config["train_batch_size"] = RLLIB_HORIZON * RLLIB_N_ROLLOUTS
+    config["sgd_minibatch_size"] = RLLIB_HORIZON
+    config["train_batch_size"] = RLLIB_HORIZON * RLLIB_N_ROLLOUTS * RLLIB_N_CPUS
+    config["gamma"] = 0.999  # discount rate
     config["sample_batch_size"] = RLLIB_HORIZON * RLLIB_N_ROLLOUTS
     config["model"].update({"fcnet_hiddens": [64, 64, 64]})
     config["use_gae"] = True
-    config["lambda"] = 0.96
-    # config["kl_target"] = 0.02 #notincluded in APPO
+    config["lambda"] = 0.97
+    config["kl_target"] = 0.02
     config["num_sgd_iter"] = 10
-    # config['clip_actions'] = False  # (ev) temporary ray bug #notincluded in APPO
+    config['clip_actions'] = False  # (ev) temporary ray bug
     config["horizon"] = RLLIB_HORIZON  # not same as env horizon.
     config["vf_loss_coeff"] = 1e-8
-    # config["vf_clip_param"] = 600 #notincluded in APPO
-    config["lr"] = 5e-4  # vary'''
+    config["vf_clip_param"] = 600
+    config["lr"] = 5e-4
 
     # save the flow params for replay
     flow_json = json.dumps(
@@ -123,7 +123,7 @@ if __name__ == "__main__":
             "stop": {
                 "training_iteration": RLLIB_TRAINING_ITERATIONS,
             },
-            "restore": '/home/kadiaz/ray_results/single_light/APPO_SingleLightEnv-v0_0_2020-07-17_14-09-28mdep4xjx/checkpoint_14/checkpoint-14',
+            # "restore": '/home/kadiaz/ray_results/single_light/APPO_SingleLightEnv-v0_0_2020-07-17_14-09-28mdep4xjx/checkpoint_14/checkpoint-14',
             # "local_dir": os.path.abspath("./ray_results"),
             "keep_checkpoints_num": 7
         }

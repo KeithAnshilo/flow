@@ -935,6 +935,27 @@ class FlowAimsunAPI(object):
                                              values=(detector_id,),
                                              out_format='i f')
         return flow, occupancy
+    
+    def get_globaledge_stoptime(self, section_id, vehTypePos):
+        """
+        Gets the intersection's offset
+
+        Parameters
+        ----------
+        node_id : int
+            the node id of the intersection
+
+        Returns
+        -------
+        int
+            the offset of the intersection
+        """
+        edge_flow, = self._send_command(ac.INT_GET_EDGE_ST,
+                                        in_format='i',
+                                        values=(section_id,),
+                                        out_format='f')
+
+        return edge_flow
 
     def set_statistical_interval(self, hour, minute, sec):
         """

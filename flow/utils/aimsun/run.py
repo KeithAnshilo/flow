@@ -480,6 +480,14 @@ def threaded_client(conn, **kwargs):
 
                 send_message(conn, in_format='i', values=(offset,))
 
+            elif data == ac.INT_GET_EDGE_ST:
+                send_message(conn, in_format='i', values=(0,))
+                section_id, = retrieve_message(conn, 'i')
+
+                edge_flow = cp.get_globaledge_stoptime(section_id)
+
+                send_message(conn, in_format='f', values=(edge_flow,))
+
             elif data == ac.INT_CHANGE_OFFSET:
                 send_message(conn, in_format='i', values=(0,))
                 node_id, offset = retrieve_message(conn, 'i f')
