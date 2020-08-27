@@ -18,7 +18,7 @@ def reload_checkpoint(result_dir, checkpoint_num, gen_emission=False, version=0,
     config = get_rllib_config(result_dir)
 
     # Run on only one cpu for rendering purposes
-    config['num_workers'] = 1
+    config['num_workers'] = 0
 
     flow_params = get_flow_params(config)
 
@@ -72,15 +72,14 @@ def replay(env, env_params, agent, ignore_policy):
         action = agent.compute_action(state)
         state, reward, done, _ = env.step(action)
         total_reward += reward
-        # if done:
-        # break
+        #if done:
+            #break
 
     # terminate the environment
     input("Press Enter when you're finished...")
     env.unwrapped.terminate()
 
     return total_reward
-
 
 if __name__ == "__main__":
     import re

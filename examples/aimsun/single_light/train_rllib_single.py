@@ -8,7 +8,7 @@ from flow.utils.rllib import FlowParamsEncoder
 from flow.utils.registry import make_create_env
 from flow.core.params import AimsunParams, NetParams, VehicleParams, EnvParams, InitialConfig
 
-from single_light import CoordinatedNetwork, SingleLightEnv, ADDITIONAL_ENV_PARAMS
+from single_light_nqueue import CoordinatedNetwork, SingleLightEnv, ADDITIONAL_ENV_PARAMS
 
 try:
     from ray.rllib.agents.agent import get_agent_class
@@ -16,16 +16,16 @@ except ImportError:
     from ray.rllib.agents.registry import get_agent_class
 
 
-SIM_STEP = 0.8  # copy to run.py
+SIM_STEP = 1  # copy to run.py #sync time
 
 # hardcoded to AIMSUN's statistics update interval (5 minutes)
-DETECTOR_STEP = 900  # copy to run.py #Cj: every 2 minutes (typical cycle length)
+DETECTOR_STEP = 900  # copy to run.py #Cj: every 15 minutes
 
-TIME_HORIZON = 3600*4 - DETECTOR_STEP  # 14280
+TIME_HORIZON = 3600*4 - DETECTOR_STEP  # 14400
 HORIZON = int(TIME_HORIZON//SIM_STEP)  # 18000
 
-RLLIB_N_CPUS = 2
-RLLIB_HORIZON = int(TIME_HORIZON//DETECTOR_STEP)  # 15
+RLLIB_N_CPUS = 4
+RLLIB_HORIZON = int(TIME_HORIZON//DETECTOR_STEP)  # 16
 
 RLLIB_N_ROLLOUTS = 3  # copy to coordinated_lights.py
 RLLIB_TRAINING_ITERATIONS = 1000000
@@ -34,8 +34,8 @@ net_params = NetParams(template=os.path.abspath("scenario_one_hourK.ang"))
 initial_config = InitialConfig()
 vehicles = VehicleParams()
 env_params = EnvParams(horizon=HORIZON,
-                       warmup_steps=int(np.ceil(120/DETECTOR_STEP)),
-                       sims_per_step=int(DETECTOR_STEP/SIM_STEP),
+                       warmup_steps=0,  # int(np.ceil(120/DETECTOR_STEP)), # 1
+                       sims_per_step=int(DETECTOR_STEP/SIM_STEP),  # 900
                        additional_params=ADDITIONAL_ENV_PARAMS)
 sim_params = AimsunParams(sim_step=SIM_STEP,
                           render=False,
@@ -46,7 +46,7 @@ sim_params = AimsunParams(sim_step=SIM_STEP,
 
 
 flow_params = dict(
-    exp_tag="single_light",
+    exp_tag="single_light_queue",
     env_name=SingleLightEnv,
     network=CoordinatedNetwork,
     simulator='aimsun',
@@ -69,29 +69,25 @@ def setup_exps(version=0):
         name of the gym environment to be trained
     dict
         training configuration parameters
-
-
     """
-
     alg_run = "PPO"
 
     agent_cls = get_agent_class(alg_run)
     config = agent_cls._default_config.copy()
     config["num_workers"] = RLLIB_N_CPUS
     config["sgd_minibatch_size"] = RLLIB_HORIZON
-    config["train_batch_size"] = RLLIB_HORIZON * RLLIB_N_ROLLOUTS * RLLIB_N_CPUS
-    config["gamma"] = 0.999  # discount rate
+    config["train_batch_size"] = RLLIB_HORIZON * RLLIB_N_ROLLOUTS
     config["sample_batch_size"] = RLLIB_HORIZON * RLLIB_N_ROLLOUTS
     config["model"].update({"fcnet_hiddens": [64, 64, 64]})
     config["use_gae"] = True
-    config["lambda"] = 0.97
+    config["lambda"] = 0.96
     config["kl_target"] = 0.02
     config["num_sgd_iter"] = 10
     config['clip_actions'] = False  # (ev) temporary ray bug
     config["horizon"] = RLLIB_HORIZON  # not same as env horizon.
     config["vf_loss_coeff"] = 1e-8
     config["vf_clip_param"] = 600
-    config["lr"] = 5e-4
+    config["lr"] = 5e-4  # vary
 
     # save the flow params for replay
     flow_json = json.dumps(
@@ -123,7 +119,7 @@ if __name__ == "__main__":
             "stop": {
                 "training_iteration": RLLIB_TRAINING_ITERATIONS,
             },
-            # "restore": '/home/kadiaz/ray_results/single_light/APPO_SingleLightEnv-v0_0_2020-07-17_14-09-28mdep4xjx/checkpoint_14/checkpoint-14',
+            "restore": '/home/damian/ray_results/single_light_queue/PPO_SingleLightEnv-v0_ab65bf70_2020-08-01_04-58-41d_bnsz2z/checkpoint_96/checkpoint-96',
             # "local_dir": os.path.abspath("./ray_results"),
             "keep_checkpoints_num": 7
         }

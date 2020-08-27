@@ -704,6 +704,27 @@ class FlowAimsunAPI(object):
                            values=(node_id, offset,),
                            out_format=None)
 
+    def get_replication_name(self, node_id):  # cj28
+        """
+        Gets the intersection's offset
+
+        Parameters
+        ----------
+        node_id : int
+            the node id of the intersection
+
+        Returns
+        -------
+        int
+            the offset of the intersection
+        """
+        rep_name, = self._send_command(ac.INT_GET_REPLICATION_NAME,
+                                       in_format='i',
+                                       values=(node_id,),
+                                       out_format='i')
+
+        return rep_name
+
     def get_duration_phase(self, node_id, phase):  # cj
         """
         Get control id and num_rings
@@ -831,7 +852,7 @@ class FlowAimsunAPI(object):
         """
         self._send_command(ac.INT_CHANGE_PHASE_DURATION_ACYCLE,
                            in_format='i i f',
-                           values=(node_id, phase, duration),
+                           values=(node_id, phase, duration,),
                            out_format=None)
 
     def get_detector_lanes(self, edge_id):  # cj
@@ -858,7 +879,7 @@ class FlowAimsunAPI(object):
         """
         Gets an intersection's incoming edges
 
-        ParametersF
+        Parameters
         ----------
         node_id : int
             the node id of the intersection
@@ -935,27 +956,6 @@ class FlowAimsunAPI(object):
                                              values=(detector_id,),
                                              out_format='i f')
         return flow, occupancy
-    
-    def get_globaledge_stoptime(self, section_id, vehTypePos):
-        """
-        Gets the intersection's offset
-
-        Parameters
-        ----------
-        node_id : int
-            the node id of the intersection
-
-        Returns
-        -------
-        int
-            the offset of the intersection
-        """
-        edge_flow, = self._send_command(ac.INT_GET_EDGE_ST,
-                                        in_format='i',
-                                        values=(section_id,),
-                                        out_format='f')
-
-        return edge_flow
 
     def set_statistical_interval(self, hour, minute, sec):
         """
@@ -1007,3 +1007,25 @@ class FlowAimsunAPI(object):
                            in_format='i',
                            values=(seed,),
                            out_format=None)
+
+    def get_green_util(self, node_id):  # gutil
+        """
+        Gets the occurence and total time of each phase in a node
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        dict
+            dict of phases and total time
+        dict
+            dict of phases and occurence
+        """
+        g_Util_pp = self._send_command(ac.INT_GET_GREEN_UTIL,
+                                       in_format='i',
+                                       values=(node_id,),
+                                       out_format='str')
+        # return g_Util
+        return [float(g_Util) for g_Util in g_Util_pp.split(',')]

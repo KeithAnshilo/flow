@@ -7,6 +7,7 @@ import struct
 import socket
 import sys
 import os
+import math
 import flow.utils.aimsun.constants as ac
 import flow.config as config
 
@@ -20,7 +21,84 @@ model = GKSystem.getSystem().getActiveModel()
 PORT = int(model.getAuthor())
 entered_vehicles = []
 exited_vehicles = []
+starting_phases = []
+start_time = [0]*2
+ut_time = [0]*2
+starting_phases = [1,9]
+time_consumed = {}
+occurence = {}
+green_phases = [1,3,5,7,9,11,13,15]
 
+
+time_consumed = dict.fromkeys(green_phases,0) # dictionary of phases {0:None, 1:none,...} Note: Only green phases
+occurence = dict.fromkeys(green_phases,0)
+
+# get cycle length, default gap-out in network
+def gUtil_at_interval(ttime, occurs, timeSta):
+    action_duration = []
+    delta = 1e-3
+    phase_list =green_phases
+    for phase in phase_list:
+        normalDurationP = aimsun_api.doublep()
+        maxDurationP = aimsun_api.doublep()
+        minDurationP = aimsun_api.doublep()
+        aimsun_api.ECIGetDurationsPhase(3344, phase, timeSta,
+                                normalDurationP, maxDurationP, minDurationP)
+        normalDuration = normalDurationP.value()
+        maxDuration = maxDurationP.value()
+        minDuration = minDurationP.value()
+        action_duration.append(normalDuration)
+
+    generated_Duration = action_duration
+    control_id = aimsun_api.ECIGetNumberCurrentControl(3344)
+    # what i need is the time_consumed, occurence, generated_duration
+    phase_util = []
+    gp_ttime = list(ttime.values()) #list of total times
+    gp_occur = list(occurs.values()) # list of no. occurences
+    gen_dur = generated_Duration # list of generated action for the interval
+
+    for tsecs, occur, dur in zip(gp_ttime, gp_occur, gen_dur):
+        try:
+            mean_t = tsecs/occur
+        except ZeroDivisionError:
+            mean_t = 0
+        util = (abs(mean_t - dur))/(dur + delta)
+        #print(mean_t, dur, util)
+        phase_util.append(util)
+    
+    #print(gp_ttime, gp_occur, gen_dur)
+    
+    return phase_util
+
+def get_current_phase(node_id):
+    num_rings = aimsun_api.ECIGetCurrentNbRingsJunction(node_id)
+    num_phases = [0]*num_rings
+    curr_phase = [None]*num_rings
+    for ring_id in range(num_rings):
+        num_phases[ring_id] = aimsun_api.ECIGetNumberPhasesInRing(node_id, ring_id)
+        curr_phase[ring_id] = aimsun_api.ECIGetCurrentPhaseInRing(node_id, ring_id)
+        if ring_id > 0:
+            curr_phase[ring_id] += num_phases[ring_id]
+    return curr_phase
+
+def get_green_time(node_id, time, timeSta):
+    #initialize values
+    cur_phases = get_current_phase(node_id)
+    global ut_time, start_time, time_consumed, occurence, starting_phases
+
+    for i, (cur_phase, start_phase) in enumerate(zip(cur_phases, starting_phases)):
+        if cur_phase != start_phase:
+            new_time = round(time)
+            ut_time[i] = abs(new_time - start_time[i])
+            #print(start_phase,start_time[i], new_time, ut_time[i])
+            start_time[i] = new_time
+            starting_phases[i] = cur_phase
+            if aimsun_api.ECIIsAnInterPhase(node_id,start_phase,timeSta) == 0:
+                time_consumed[start_phase] += ut_time[i]
+                occurence[start_phase] += 1
+                
+
+    return time_consumed, occurence
 
 def send_message(conn, in_format, values):
     """Send a message to the client.
@@ -480,14 +558,6 @@ def threaded_client(conn, **kwargs):
 
                 send_message(conn, in_format='i', values=(offset,))
 
-            elif data == ac.INT_GET_EDGE_ST:
-                send_message(conn, in_format='i', values=(0,))
-                section_id, = retrieve_message(conn, 'i')
-
-                edge_flow = cp.get_globaledge_stoptime(section_id)
-
-                send_message(conn, in_format='f', values=(edge_flow,))
-
             elif data == ac.INT_CHANGE_OFFSET:
                 send_message(conn, in_format='i', values=(0,))
                 node_id, offset = retrieve_message(conn, 'i f')
@@ -496,6 +566,14 @@ def threaded_client(conn, **kwargs):
                 timeSta = kwargs.get('timeSta')
                 acycle = kwargs.get('acycle')
                 cp.change_offset(node_id, offset, time, timeSta, acycle)
+            
+            elif data == ac.INT_GET_REPLICATION_NAME:
+                send_message(conn, in_format='i', values=(0,))
+                node_id, = retrieve_message(conn, 'i')
+
+                rep_name = cp.get_replication_name(node_id)
+
+                send_message(conn, in_format='i', values=(rep_name,))
 
             elif data == ac.INT_GET_DURATION_PHASE:  # cj
                 send_message(conn, in_format='i', values=(0,))
@@ -530,6 +608,19 @@ def threaded_client(conn, **kwargs):
 
                 send_message(conn, in_format='str', values=(output,))
 
+            elif data == ac.INT_GET_GREEN_UTIL:
+                send_message(conn, in_format='i', values=(0,))
+                node_id, = retrieve_message(conn, 'i')
+
+                control_id, num_rings = cp.get_control_ids(node_id)
+                g_Util = kwargs.get('gp_Util') #list of utilization per phase :)
+
+                #send_message(conn, in_format='f', values=(g_Util,))
+
+                g_Util_pp = ','.join(str(i) for i in g_Util)
+
+                send_message(conn, in_format='str', values=(g_Util_pp,))
+
             elif data == ac.INT_CHANGE_PHASE_DURATION:
                 send_message(conn, in_format='i', values=(0,))
                 node_id, phase, duration, maxout = retrieve_message(conn, 'i i f f')
@@ -538,15 +629,6 @@ def threaded_client(conn, **kwargs):
                 timeSta = kwargs.get('timeSta')
                 acycle = kwargs.get('acycle')
                 cp.change_phase_duration(node_id, phase, duration, maxout, time, timeSta, acycle)
-
-            elif data == ac.INT_CHANGE_PHASE_DURATION_ACYCLE:
-                send_message(conn, in_format='i', values=(0,))
-                node_id, phase, duration = retrieve_message(conn, 'i i f')
-
-                time = kwargs.get('time')
-                timeSta = kwargs.get('timeSta')
-                acycle = kwargs.get('acycle')
-                cp.change_phase_duration_acycle(node_id, phase, duration, time, timeSta, acycle)
 
             elif data == ac.INT_GET_IN_EDGES:
                 send_message(conn, in_format='i', values=(0,))
@@ -573,8 +655,8 @@ def threaded_client(conn, **kwargs):
                 output = json.dumps(detector_list)
 
                 send_message(conn, in_format='str', values=(output,))
-
-            elif data == ac.DET_GET_DETECTOR_LANES:  # cj
+            
+            elif data == ac.DET_GET_DETECTOR_LANES: #cj
                 send_message(conn, in_format='i', values=(0,))
                 edge_id, = retrieve_message(conn, 'i')
 
@@ -608,7 +690,7 @@ def threaded_client(conn, **kwargs):
                 seed, = retrieve_message(conn, 'i')
 
                 cp.set_replication_seed(seed)
-
+            
             # in case the message is unknown, return -1001
             else:
                 send_message(conn, in_format='i', values=(-1001,))
@@ -632,7 +714,17 @@ def AAPIInit():
 def AAPIManage(time, timeSta, timeTrans, acycle):
     """Execute commands before an Aimsun simulation step."""
     # Create a thread when data needs to be sent back to FLOW
-    if not time % (900 * 0.8):  # DETECTOR_STEP * SIM_STEP (copy from train_rllib.py)
+    time_consumed, occurence = get_green_time(3344, time, timeSta)
+    global time_consumed, occurence
+    delta = 0.8/4
+    # - delta < time%900 < + delta
+    ## TODO: pass sim_step, sims_per_step
+    ## compare aimsun_time with flow_time.  flow_time is sim_step*sims_per_step
+    # math.isclose(time, 900, a_tol=delta)
+    # if math.isclose(time%900, 0, abs_tol=delta) or math.isclose(time%900, 900, abs_tol=delta):
+    if ((time % 900) > -delta and (time % 900) < delta) or ((time % 900) > 900-delta and (time % 900) < 900+delta):
+        gp_Util = gUtil_at_interval(time_consumed, occurence, timeSta)
+        print(gp_Util)
         # tcp/ip connection from the aimsun process
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -643,8 +735,12 @@ def AAPIManage(time, timeSta, timeTrans, acycle):
         c, address = server_socket.accept()
 
         # start the threaded process
-        kwargs = {"time": time, "timeSta": timeSta, "timeTrans": timeTrans, "acycle": acycle}
+        kwargs = {"time": time, "timeSta": timeSta, "timeTrans": timeTrans, "acycle": acycle, "gp_Util": gp_Util}
+
         start_new_thread(threaded_client, (c,), kwargs)
+
+        time_consumed = dict.fromkeys(time_consumed,0)
+        occurence = dict.fromkeys(occurence,0)  
 
     return 0
 

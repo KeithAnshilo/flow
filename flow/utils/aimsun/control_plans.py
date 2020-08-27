@@ -12,12 +12,10 @@ def get_intersection_offset(node_id):
     return aapi.ECIGetOffset(node_id)
 
 
-def get_globaledge_stoptime(section_id):
-    vehTypePos = 0
-    estad = aapi.AKIEstGetGlobalStatisticsSection(section_id, vehTypePos)
-    edge_flow = estad.STa
-
-    return edge_flow
+def get_replication_name(node_id):  # cj28
+    node_id = node_id
+    rep_name = aapi.ANGConnGetReplicationId()
+    return rep_name
 
 
 def get_cumulative_queue_length(section_id):
@@ -138,7 +136,7 @@ def get_green_phases(node_id, ring_id, timeSta):
 def change_phase_duration(node_id, phase, duration, maxout, time, timeSta, acycle):
     control_id, _ = get_control_ids(node_id)
     aapi.ECIChangeTimingPhase(node_id, phase, duration, timeSta)
-    aapi.ECISetActuatedParamsMaxGreen(control_id, node_id, phase, maxout)
+    #aapi.ECISetActuatedParamsMaxGreen(control_id, node_id, phase, maxout)
     #phase_duration, maxd, mind = get_duration_phase(node_id, phase, timeSta)
 
 

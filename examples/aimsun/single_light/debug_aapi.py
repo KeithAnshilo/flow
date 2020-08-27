@@ -18,11 +18,6 @@ node_id = 3344
 interval = 15*60
 carPos = 0
 
-with open('test.csv', 'w') as csvFile:
-    data = []
-    fieldnames = ['centroid']
-    csv_writer = csv.DictWriter(csvFile, fieldnames=fieldnames)
-    csv_writer.writeheader()
 
 
 def random_sum_to(n, num_terms=None):
@@ -30,19 +25,6 @@ def random_sum_to(n, num_terms=None):
     a = r.sample(range(1, n), num_terms) + [0, n]
     list.sort(a)
     return [a[i+1] - a[i] for i in range(len(a) - 1)]
-
-
-def get_current_phase(node_id):
-    num_rings = aapi.ECIGetCurrentNbRingsJunction(node_id)
-    num_phases = [0]*num_rings
-    curr_phase = [None]*num_rings
-    for ring_id in range(num_rings):
-        num_phases[ring_id] = aapi.ECIGetNumberPhasesInRing(node_id, ring_id)
-        curr_phase[ring_id] = aapi.ECIGetCurrentPhaseInRing(node_id, ring_id)
-        if ring_id > 0:
-            curr_phase[ring_id] += sum(num_phases[:ring_id])
-    return curr_phase
-
 
 def get_duration_phase(node_id, phase, timeSta):
     normalDurationP = aapi.doublep()
@@ -61,14 +43,6 @@ def get_phases(ring_id):
     for phase in range(1, num_phases*2+1):
         phases.append(phase)
     return phases
-
-
-def get_ids(node_id):
-    # returns number of rings and control_id
-    control_id = aapi.ECIGetNumberCurrentControl(node_id)
-    num_rings = aapi.ECIGetNbRingsJunction(control_id, node_id)
-
-    return control_id, num_rings
 
 
 def get_total_green(node_id, ring_id, timeSta):
@@ -197,58 +171,100 @@ def get_centroid(node_id):
         print(origin, destination, demand, stat)
         i += 1
 
+def get_current_phase(node_id):
+    num_rings = aapi.ECIGetCurrentNbRingsJunction(node_id)
+    num_phases = [0]*num_rings
+    curr_phase = [None]*num_rings
+    for ring_id in range(num_rings):
+        num_phases[ring_id] = aapi.ECIGetNumberPhasesInRing(node_id, ring_id)
+        curr_phase[ring_id] = aapi.ECIGetCurrentPhaseInRing(node_id, ring_id)
+        if ring_id > 0:
+            curr_phase[ring_id] += num_phases[ring_id]
+    return curr_phase
+
+def get_green_phases(node_id, ring_id, timeSta):
+    a = 1
+    num_phases = aapi.ECIGetNumberPhasesInRing(node_id, ring_id)
+    if ring_id > 0:
+        a = num_phases + 1
+        num_phases = num_phases*2
+
+    return [phase for phase in range(a, num_phases+1) if aapi.ECIIsAnInterPhase(node_id, phase, timeSta) == 0]
+
+def get_ids(node_id):
+    # returns number of rings and control_id
+    control_id = aapi.ECIGetNumberCurrentControl(node_id)
+    num_rings = aapi.ECIGetNbRingsJunction(control_id, node_id)
+
+    return control_id, num_rings
+
+def init_green_time(node_id, time, timeSta):
+    global time_consumed, occurence, starting_phases, start_time, ut_time
+    control_id, num_rings = get_ids(node_id)
+    start_time = [0]*num_rings
+    ut_time = [0]*num_rings
+    starting_phases = [1,9]
+    green_phases = []
+
+    #create dictionary for recording, get curr_phase
+    for ring_id in range(num_rings):
+        green_phases = green_phases + (get_green_phases(node_id, ring_id, timeSta))
+
+    time_consumed = dict.fromkeys(green_phases,0) # dictionary of phases {0:None, 1:none,...} Note: Only green phases
+    occurence = dict.fromkeys(green_phases,0)
+
+def get_green_time(node_id, time, timeSta):
+    #initialize values
+    global start_time, ut_time, starting_phases, time_consumed, occurence
+    cur_phases = get_current_phase(node_id)
+
+    for i, (cur_phase, start_phase) in enumerate(zip(cur_phases, starting_phases)):
+        if cur_phase != start_phase:
+            new_time = round(time)
+            ut_time[i] = new_time - start_time[i]
+            print(start_phase,start_time[i], new_time, ut_time[i])
+            start_time[i] = new_time
+            if aapi.ECIIsAnInterPhase(node_id,start_phase,timeSta) == 0:
+                time_consumed[start_phase] += ut_time[i]
+                occurence[start_phase] += 1
+            starting_phases[i] = cur_phases[i]
+            new_time = 0
+    
+    return time_consumed, occurence
+
 
 def AAPILoad():
     return 0
 
 
 def AAPIInit():
-    model = gk.GKSystem.getSystem().getActiveModel()
-    warmup_time = gk.GKExperiment.getWarmUpTime().getActiveModel()
-    print(model, warmup_time)
 
+        
     return 0
-    """for section in westbound_section:
-        flow = aapi.AKIStateDemandGetDemandSection(section, 0, 0) 
-        #aapi.AKIStateDemandSetDemandSection(section, 0, 1, double anewflow)
-        print(section, flow) 
-    return 0"""
 
 
 def AAPIManage(time, timeSta, timeTrans, acycle):
+    global time_consumed, occurence
+    if time == 0:
+        init_green_time(node_id,time,timeSta)
+    else:
+        time_consumed, occurence = get_green_time(3344, time, timeSta)
     
-    if time % 60 == 0:
-        for section in westbound_section:
-            flow = aapi.AKIStateDemandGetDemandSection(section, 1, 0)
-            # aapi.AKIStateDemandSetDemandSection(section, 0, 1, double anewflow)
-            print(section, flow)
+    if time % 900 == 0:
+        print(time_consumed, occurence)
+        time_consumed = dict.fromkeys(time_consumed,0)
+        occurence = dict.fromkeys(occurence,0)
     return 0
 
 
 def AAPIPostManage(time, timeSta, timeTrans, acycle):
-    # if time % 900 == 0:
-        #control_id, ring_id, phase_list = get_current_ids(node_id)
-
     return 0
 
 
 def AAPIFinish():
-    """ring_id = 0
-    phase = aapi.ECIGetCurrentPhaseInRing(node_id, ring_id)
-    print(phase)
-    normalDurationP = aapi.doublep()
-    maxDurationP = aapi.doublep()
-    minDurationP = aapi.doublep()
-    aapi.ECIGetDurationsPhase(node_id, phase, timeSta,
-                                normalDurationP, maxDurationP, minDurationP)
-    normalDuration = normalDurationP.value()
-    maxDuration = maxDurationP.value()
-    minDuration = minDurationP.value()
-    print('normalDuration: {} maxDuration: {} minDuration: {}'.format(normalDuration, maxDuration,minDuration))
-    # thus I that maxDuration, minDuration == MinGreen and MaxOut
-    # So where should i put thiisssss, I think probably in the RL training? Because it is a condition for the predicted value!
-    # Hmm, sounds like a great hypothesis. Should consult others though
-    # Therefore, let's go create an environment!!!!!!"""
+    time_consumed = dict.fromkeys(time_consumed,0)
+    occurence = dict.fromkeys(occurence,0)
+
     return 0
 
 

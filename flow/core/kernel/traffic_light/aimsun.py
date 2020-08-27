@@ -105,6 +105,22 @@ class AimsunKernelTrafficLight(KernelTrafficLight):
         """
         return self.kernel_api.change_intersection_offset(node_id, offset)
 
+    def get_replication_name(self, node_id):  # cj28
+        """
+        Gets the replication name
+
+        Parameters
+        ----------
+        node_id : int
+            the node id of the intersection
+
+        Returns
+        -------
+        int
+            the replication id/name
+        """
+        return self.kernel_api.get_replication_name(node_id)
+
     def get_cycle_length(self, node_id, control_id):  # cj
         """
         Gets the intersection's offset
@@ -290,21 +306,6 @@ class AimsunKernelTrafficLight(KernelTrafficLight):
         """
         return self.kernel_api.get_detector_count_and_occupancy(detector_id)
 
-    def get_globaledge_stoptime(self, section_id):
-        """
-        Gets edge flow
-
-        Parameters
-        ----------
-        section_id : ints
-
-        Returns
-        -------
-        int
-            flow
-        """
-        return self.kernel_api.get_globaledge_stoptime(section_id, 0)
-
     def set_replication_seed(self, seed):
         """
         Sets the replication seed
@@ -316,3 +317,15 @@ class AimsunKernelTrafficLight(KernelTrafficLight):
         """
 
         return self.kernel_api.set_replication_seed(seed)
+
+    def get_green_util(self, node_id):
+        """
+        Gets the green time utilization at a specific node
+
+        Parameters
+        ----------
+        node_id: int
+            junction id
+        """
+
+        return self.kernel_api.get_green_util(node_id)
