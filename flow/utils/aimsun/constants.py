@@ -144,6 +144,9 @@ INT_GET_GREEN_UTIL = 0x2E
 #: set intersection phase acyclical
 INT_CHANGE_PHASE_DURATION_ACYCLE = 0x30
 
+#: set intersection phase acyclical
+INT_GET_DELAY = 0x31
+
 ###############################################################################
 #                           Detector Commands                            #
 ###############################################################################

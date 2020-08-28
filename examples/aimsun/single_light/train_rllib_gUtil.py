@@ -30,7 +30,7 @@ RLLIB_HORIZON = int(TIME_HORIZON//DETECTOR_STEP)  # 16
 RLLIB_N_ROLLOUTS = 3  # copy to coordinated_lights.py
 RLLIB_TRAINING_ITERATIONS = 1000000
 
-net_params = NetParams(template=os.path.abspath("scenario_one_hour.ang"))
+net_params = NetParams(template=os.path.abspath("adaptive_fixed.ang"))
 initial_config = InitialConfig()
 vehicles = VehicleParams()
 env_params = EnvParams(horizon=HORIZON,

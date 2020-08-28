@@ -167,7 +167,7 @@ class SingleLightEnv(Env):
     @property
     def action_space(self):
         """See class definition."""
-        return Tuple(8 * (Discrete(70, ),))
+        return Tuple(4 * (Discrete(70, ),))
 
     @property
     def observation_space(self):
@@ -189,20 +189,14 @@ class SingleLightEnv(Env):
         actions = np.array(rl_actions).flatten()
 
         turn_minphase_ring1 = min_green_turn if actions[0] <= 5 else actions[0]  # set min green for phase 1
-        turn_minphase_ring9 = min_green_turn if actions[1] <= 5 else actions[1]  # set min green for phase 9
-        turn_minphase_ring5 = min_green_turn if actions[4] <= 5 else actions[4]  # set min green for phase 5
-        turn_minphase_ring13 = min_green_turn if actions[5] <= 5 else actions[5]  # set min green for phase 13
+        turn_minphase_ring5 = min_green_turn if actions[2] <= 5 else actions[2]  # set min green for phase 9
 
-        phase_actions = [max_green_turn if actions[0] >= 30 else turn_minphase_ring1,  # Phase 1
-                         max_green_turn if actions[1] >= 30 else turn_minphase_ring9,  # Phase 9
-                         min_green_through if actions[2] <= 15 else actions[2],  # Phase 3
-                         min_green_through if actions[3] <= 15 else actions[3],  # Phase 11
-                         max_green_turn if actions[4] >= 30 else turn_minphase_ring5,  # Phase 5
-                         max_green_turn if actions[5] >= 30 else turn_minphase_ring13,  # Phase 13
-                         min_green_through if actions[6] <= 15 else actions[6],  # Phase 7
-                         min_green_through if actions[7] <= 15 else actions[7]]  # Phase 15
+        phase_actions = [max_green_turn if actions[0] >= 30 else turn_minphase_ring1,  # Phase 1 (turn)
+                         min_green_through if actions[1] <= 15 else actions[1],  # Phase 3 (through)
+                         max_green_turn if actions[2] >= 30 else turn_minphase_ring5,  # Phase 5 (turn)
+                         min_green_through if actions[3] <= 15 else actions[3], ]  # Phase 7 (through)
 
-        phase_order = [1, 9, 3, 11, 5, 13, 7, 15]
+        phase_order = [1, 3, 5, 7]
 
         for phase, action in zip(phase_order, phase_actions):
             if action:
@@ -220,7 +214,7 @@ class SingleLightEnv(Env):
         num_measures = (ap['num_measures'])
         normal = 2000
 
-        #util_per_phase = self.k.traffic_light.get_green_util(self.node_id)
+        # util_per_phase = self.k.traffic_light.get_green_util(self.node_id)
         # print(util_per_phase)
         shape = (num_nodes, num_edges, num_detectors_types, num_measures)
         det_state = np.zeros(shape)
@@ -286,10 +280,10 @@ class SingleLightEnv(Env):
         """Computes the sum of queue lengths at all intersections in the network."""
         util_per_phase = self.k.traffic_light.get_green_util(self.node_id)
         reward = 0
-        ave_util_section = {568: mean([util_per_phase[0], util_per_phase[5]]),
-                            22208: mean([util_per_phase[2], util_per_phase[7]]),
-                            400: mean([util_per_phase[1], util_per_phase[4]]),
-                            22211: mean([util_per_phase[3], util_per_phase[6]])
+        ave_util_section = {568: mean([util_per_phase[0], util_per_phase[1]]),
+                            22208: mean([util_per_phase[2], util_per_phase[3]]),
+                            400: mean([util_per_phase[0], util_per_phase[1]]),
+                            22211: mean([util_per_phase[2], util_per_phase[3]])
                             }
        # queue length as reward
 
@@ -304,9 +298,7 @@ class SingleLightEnv(Env):
         # note: self.k.simulation.time is flow time
         # f'{slow_time} \t {aimsun_time}
         print(f'{self.k.simulation.time:.0f}', '\t', f'{reward:.4f}', '\t', self.control_id, '\t',
-              self.current_phase_timings[0], '\t', self.current_phase_timings[1], '\t', self.current_phase_timings[2], '\t',
-              self.current_phase_timings[3], '\t', self.current_phase_timings[4], '\t', self.current_phase_timings[5], '\t',
-              self.current_phase_timings[6], '\t', self.current_phase_timings[7], '\t', sum(self.current_phase_timings[4:])+18, self.sum_barrier)
+              self.current_phase_timings[0], '\t', self.current_phase_timings[1], '\t', self.current_phase_timings[2], '\t', self.current_phase_timings[3], '\t', self.k.traffic_light.get_intersection_delay(self.node_id))
         # print(self.phase_array)
         # print(self.maxd_list)
 
