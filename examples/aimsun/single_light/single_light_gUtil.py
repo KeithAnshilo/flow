@@ -282,6 +282,7 @@ class SingleLightEnv(Env):
         return state
 
     def compute_reward(self, rl_actions, **kwargs):
+        import csv
         from statistics import mean
         """Computes the sum of queue lengths at all intersections in the network."""
         util_per_phase = self.k.traffic_light.get_green_util(self.node_id)
@@ -306,9 +307,21 @@ class SingleLightEnv(Env):
         print(f'{self.k.simulation.time:.0f}', '\t', f'{reward:.4f}', '\t', self.control_id, '\t',
               self.current_phase_timings[0], '\t', self.current_phase_timings[1], '\t', self.current_phase_timings[2], '\t',
               self.current_phase_timings[3], '\t', self.current_phase_timings[4], '\t', self.current_phase_timings[5], '\t',
-              self.current_phase_timings[6], '\t', self.current_phase_timings[7], '\t', sum(self.current_phase_timings[4:])+18, self.sum_barrier)
+              self.current_phase_timings[6], '\t', self.current_phase_timings[7], '\t', sum(self.current_phase_timings[4:])+18, self.sum_barrier, '\t', self.k.traffic_light.get_intersection_delay(self.node_id))
         # print(self.phase_array)
         # print(self.maxd_list)
+
+        fieldnames = ['time', 'reward', 'P1', 'P9', 'P3', 'P11', 'P5', 'P13', 'P7', 'P15', 'Delay', 'period']
+        with open('training_logs.csv', 'a') as csvFile:
+            csv_writer = csv.DictWriter(csvFile, fieldnames=fieldnames)
+            csv_writer.writerow({'time': f'{self.k.simulation.time:.0f}', 'reward': f'{reward:.4f}',
+                                 'P1': self.current_phase_timings[0], 'P9': self.current_phase_timings[1],
+                                 'P3': self.current_phase_timings[2], 'P11': self.current_phase_timings[3],
+                                 'P5': self.current_phase_timings[4], 'P13': self.current_phase_timings[5],
+                                 'P7': self.current_phase_timings[6], 'P15': self.current_phase_timings[7],
+                                 'Delay': self.k.traffic_light.get_intersection_delay(self.node_id),
+                                 "period": self.k.traffic_light.get_replication_name(self.node_id)
+                                 })
 
         return reward
 

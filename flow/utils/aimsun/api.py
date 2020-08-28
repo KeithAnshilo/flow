@@ -683,6 +683,27 @@ class FlowAimsunAPI(object):
 
         return offset
 
+    def get_intersection_delay(self, node_id):
+        """
+        Gets the intersection's average approach delay
+
+        Parameters
+        ----------
+        node_id : int
+            the node id of the intersection
+
+        Returns
+        -------
+        int
+            the offset of the intersection
+        """
+        delay, = self._send_command(ac.INT_GET_DELAY,
+                                    in_format='i',
+                                    values=(node_id,),
+                                    out_format='f')
+
+        return delay
+
     def change_intersection_offset(self, node_id, offset):
         """
         Changes an intersection's offset by the above offset
