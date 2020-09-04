@@ -304,7 +304,7 @@ class SingleLightEnv(Env):
             reward -= (queue**2) * 100
         # note: self.k.simulation.time is flow time
         # f'{slow_time} \t {aimsun_time}
-        print(f'{self.k.simulation.time:.0f}', '\t', f'{reward:.4f}', '\t', self.control_id, '\t',
+        print(f'{self.k.simulation.time:.0f}', '\t', f'{reward:.4f}', '\t', self.control_id, '\t', self.k.traffic_light.get_replication_name(self.node_id   ), '\t', 
               self.current_phase_timings[0], '\t', self.current_phase_timings[1], '\t', self.current_phase_timings[2], '\t',
               self.current_phase_timings[3], '\t', self.current_phase_timings[4], '\t', self.current_phase_timings[5], '\t',
               self.current_phase_timings[6], '\t', self.current_phase_timings[7], '\t', sum(self.current_phase_timings[4:])+18, self.sum_barrier, '\t', self.k.traffic_light.get_intersection_delay(self.node_id))

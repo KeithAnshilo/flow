@@ -1,3 +1,4 @@
+import numpy as np
 import AAPI as aapi
 import sys
 import csv
@@ -5,7 +6,6 @@ import PyANGKernel as gk
 import PyANGConsole as cs
 from datetime import datetime
 sys.path.append('/home/cjrsantos/anaconda3/envs/aimsun_flow/lib/python2.7/site-packages')
-import numpy as np
 
 model = gk.GKSystem.getSystem().getActiveModel()
 # global edge_detector_dict
@@ -19,7 +19,7 @@ sections = [22208, 568, 22211, 400]
 node_id = 3344
 
 interval = 15*60
-#seed = np.random.randint(2e9)
+# seed = np.random.randint(2e9)
 
 replication_name = aapi.ANGConnGetReplicationId()
 replication = model.getCatalog().find(8050315)
@@ -70,12 +70,12 @@ def sum_queue(section_id):
 
         queue = queue * 5 / section.length2D()
 
-    print('SUM QUEUE {} : {}'.format(node_id))
 
 def set_replication_seed(seed):
     replications = model.getCatalog().getObjectsByType(model.getType("GKReplication"))
     for replication in replications.values():
         replication.setRandomSeed(seed)
+
 
 def get_ttadta(section_id, timeSta):
     # print( "AAPIPostManage" )
@@ -110,6 +110,7 @@ def get_phases(ring_id):
         phases.append(phase)
     return phases
 
+
 def get_duration_phase(node_id, phase, timeSta):
     normalDurationP = aapi.doublep()
     maxDurationP = aapi.doublep()
@@ -121,6 +122,7 @@ def get_duration_phase(node_id, phase, timeSta):
     minDuration = minDurationP.value()
 
     return normalDuration, maxDuration, minDuration
+
 
 def get_phase_duration_list(node_id, timeSta):
     control_id, num_rings = get_control_ids(node_id)
@@ -142,8 +144,8 @@ def AAPILoad():
 
 
 def AAPIInit():
-    #set_replication_seed(seed)
-    #print(seed)
+    # set_replication_seed(seed)
+    # print(seed)
     return 0
 
 
@@ -158,37 +160,37 @@ def AAPIPostManage(time, timeSta, timeTrans, acycle):
         time = time
         timeSta = timeSta
         ave_app_delay = aapi.AKIEstGetPartialStatisticsNodeApproachDelay(node_id)
-        dur_list, cycle= get_phase_duration_list(node_id, timeSta)
+        dur_list, cycle = get_phase_duration_list(node_id, timeSta)
         barrier = (sum(dur_list[0:2]), sum(dur_list[2:4]))
-           # print('dt: {:.4f}, tt: {:.4f}'.format(estad.DTa, estad.TTa))
-           # print('\n Mean Queue: \t {}'.format(estad.))
+        # print('dt: {:.4f}, tt: {:.4f}'.format(estad.DTa, estad.TTa))
+        # print('\n Mean Queue: \t {}'.format(estad.))
 
         if replication_name == 8050297:
-            with open('{}.csv'.format(replication_name), 'a') as csvFile:
+            with open('/home/kadiaz/flow/examples/aimsun/single_light/baseline_AM.csv', 'a') as csvFile:
                 csv_writer = csv.DictWriter(csvFile, fieldnames=fieldnames)
-                csv_writer.writerow({'time': '{}'.format(time), 'delay_time': '{}'.format(ave_app_delay), 
-                    '1': '{}'.format(dur_list[0]), '3': '{}'.format(dur_list[1]), '5': '{}'.format(dur_list[2]), 
-                    '7': '{}'.format(dur_list[3]), '9': '{}'.format(dur_list[4]), '11': '{}'.format(dur_list[5]), 
-                    '13': '{}'.format(dur_list[6]), '15': '{}'.format(dur_list[7]),
-                    'cycle': '{}'.format(cycle), 'barrier': '{}'.format(barrier)})
+                csv_writer.writerow({'time': '{}'.format(time), 'delay_time': '{}'.format(ave_app_delay),
+                                     '1': '{}'.format(dur_list[0]), '3': '{}'.format(dur_list[1]), '5': '{}'.format(dur_list[2]),
+                                     '7': '{}'.format(dur_list[3]), '9': '{}'.format(dur_list[4]), '11': '{}'.format(dur_list[5]),
+                                     '13': '{}'.format(dur_list[6]), '15': '{}'.format(dur_list[7]),
+                                     'cycle': '{}'.format(cycle), 'barrier': '{}'.format(barrier)})
 
-        elif replication_name == 8050315:
-            with open('{}.csv'.format(replication_name), 'a') as csvFile:
+        if replication_name == 8050315:
+            with open('/home/kadiaz/flow/examples/aimsun/single_light/baseline_noon.csv', 'a') as csvFile:
                 csv_writer = csv.DictWriter(csvFile, fieldnames=fieldnames)
-                csv_writer.writerow({'time': '{}'.format(time), 'delay_time': '{}'.format(ave_app_delay), 
-                    '1': '{}'.format(dur_list[0]), '3': '{}'.format(dur_list[1]), '5': '{}'.format(dur_list[2]), 
-                    '7': '{}'.format(dur_list[3]), '9': '{}'.format(dur_list[4]), '11': '{}'.format(dur_list[5]), 
-                    '13': '{}'.format(dur_list[6]), '15': '{}'.format(dur_list[7]),
-                    'cycle': '{}'.format(cycle), 'barrier': '{}'.format(barrier)})
+                csv_writer.writerow({'time': '{}'.format(time), 'delay_time': '{}'.format(ave_app_delay),
+                                     '1': '{}'.format(dur_list[0]), '3': '{}'.format(dur_list[1]), '5': '{}'.format(dur_list[2]),
+                                     '7': '{}'.format(dur_list[3]), '9': '{}'.format(dur_list[4]), '11': '{}'.format(dur_list[5]),
+                                     '13': '{}'.format(dur_list[6]), '15': '{}'.format(dur_list[7]),
+                                     'cycle': '{}'.format(cycle), 'barrier': '{}'.format(barrier)})
 
         if replication_name == 8050322:
-            with open('{}.csv'.format(replication_name), 'a') as csvFile:
+            with open('/home/kadiaz/flow/examples/aimsun/single_light/baseline_PM.csv', 'a') as csvFile:
                 csv_writer = csv.DictWriter(csvFile, fieldnames=fieldnames)
-                csv_writer.writerow({'time': '{}'.format(time), 'delay_time': '{}'.format(ave_app_delay), 
-                    '1': '{}'.format(dur_list[0]), '3': '{}'.format(dur_list[1]), '5': '{}'.format(dur_list[2]), 
-                    '7': '{}'.format(dur_list[3]), '9': '{}'.format(dur_list[4]), '11': '{}'.format(dur_list[5]), 
-                    '13': '{}'.format(dur_list[6]), '15': '{}'.format(dur_list[7]),
-                    'cycle': '{}'.format(cycle), 'barrier': '{}'.format(barrier)})
+                csv_writer.writerow({'time': '{}'.format(time), 'delay_time': '{}'.format(ave_app_delay),
+                                     '1': '{}'.format(dur_list[0]), '3': '{}'.format(dur_list[1]), '5': '{}'.format(dur_list[2]),
+                                     '7': '{}'.format(dur_list[3]), '9': '{}'.format(dur_list[4]), '11': '{}'.format(dur_list[5]),
+                                     '13': '{}'.format(dur_list[6]), '15': '{}'.format(dur_list[7]),
+                                     'cycle': '{}'.format(cycle), 'barrier': '{}'.format(barrier)})
 
     """# console = cs.ANGConsole()
     if time == interval:
