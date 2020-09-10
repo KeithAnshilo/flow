@@ -917,7 +917,7 @@ class FlowAimsunAPI(object):
 
         return [int(edge_id) for edge_id in edge_ids.split(',')]
 
-    def get_cumulative_queue_length(self, section_id):
+    def get_cumulative_queue_length(self, section_id, phase_num):
         """
         Gets a section's cumulative queue length
 
@@ -925,6 +925,8 @@ class FlowAimsunAPI(object):
         ----------
         section_id : int
             the id of the section
+        phase_num : int
+            the id of the phase
 
         Returns
         -------
@@ -932,8 +934,8 @@ class FlowAimsunAPI(object):
             the cumulative queue length
         """
         cume_queue_length, = self._send_command(ac.INT_GET_CUME_QUEUE_LENGTH,
-                                                in_format='i',
-                                                values=(section_id,),
+                                                in_format='i i',
+                                                values=(section_id, phase_num,),
                                                 out_format='f')
 
         return cume_queue_length

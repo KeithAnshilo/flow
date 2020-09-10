@@ -283,35 +283,38 @@ class SingleLightEnv(Env):
 
     def compute_reward(self, rl_actions, **kwargs):
         import csv
-        from statistics import mean
+        import math
         """Computes the sum of queue lengths at all intersections in the network."""
         util_per_phase = self.k.traffic_light.get_green_util(self.node_id)
+        # list of utils, order: 1,3,5,7,9,11,13,15
+        lane_ids = {400: {9: [1], 3: [2, 3, 4]},  # left
+                    22208: {5: [1, 2], 15: [3, 4, 5]},  # top
+                    568: {1: [1], 11: [2, 3, 4]},  # right
+                    22211: {13: [1, 2], 7: [3, 4, 5]}  # bottom
+                    }
+        phase_order = [1, 9, 3, 11, 5, 13, 7, 15]
+
         reward = 0
-        ave_util_section = {568: mean([util_per_phase[0], util_per_phase[5]]),
-                            22208: mean([util_per_phase[2], util_per_phase[7]]),
-                            400: mean([util_per_phase[1], util_per_phase[4]]),
-                            22211: mean([util_per_phase[3], util_per_phase[6]])
-                            }
-       # queue length as reward
+        edge_queue = 0
+        queue = 0
 
-        for section_id in self.past_cumul_queue:
-            queue_factor = 1 if ave_util_section.get(section_id) == 0 else 1 + ave_util_section.get(section_id)
-            current_cumul_queue = self.k.traffic_light.get_cumulative_queue_length(section_id)*queue_factor
-            queue = current_cumul_queue - self.past_cumul_queue[section_id]
-            self.past_cumul_queue[section_id] = current_cumul_queue
+        phase_util = {k: v for k, v in zip(phase_order, util_per_phase)}  # dict of phase_id:phase_util
 
-            # reward is negative queues
-            reward -= (queue**2) * 100
-        # note: self.k.simulation.time is flow time
-        # f'{slow_time} \t {aimsun_time}
-        print(f'{self.k.simulation.time:.0f}', '\t', f'{reward:.4f}', '\t', self.control_id, '\t', self.k.traffic_light.get_replication_name(self.node_id   ), '\t', 
+        for section_id in lane_ids.keys():
+            for phase_num in lane_ids.get(section_id).keys():
+                pqf = 1 if phase_util[phase_num] == 0 else (1 + math.log(1+phase_util[phase_num]))
+                cur_phase_queue = self.k.traffic_light.get_cumulative_queue_length(section_id, phase_num)*pqf
+                edge_queue -= cur_phase_queue  # negative sum of phase queues
+
+            queue += edge_queue  # weighted queue length per edge, this will be negative
+        reward -= (queue**2)  # negative sum of edge queues
+
+        print(f'{self.k.simulation.time:.0f}', '\t', f'{reward:.4f}', '\t', self.control_id, '\t', self.k.traffic_light.get_replication_name(self.node_id), '\t',
               self.current_phase_timings[0], '\t', self.current_phase_timings[1], '\t', self.current_phase_timings[2], '\t',
               self.current_phase_timings[3], '\t', self.current_phase_timings[4], '\t', self.current_phase_timings[5], '\t',
               self.current_phase_timings[6], '\t', self.current_phase_timings[7], '\t', sum(self.current_phase_timings[4:])+18, self.sum_barrier, '\t', self.k.traffic_light.get_intersection_delay(self.node_id))
-        # print(self.phase_array)
-        # print(self.maxd_list)
 
-        fieldnames = ['time', 'reward', 'P1', 'P9', 'P3', 'P11', 'P5', 'P13', 'P7', 'P15', 'Delay', 'period']
+        '''fieldnames = ['time', 'reward', 'P1', 'P9', 'P3', 'P11', 'P5', 'P13', 'P7', 'P15', 'Delay', 'period']
         with open('training_logs.csv', 'a') as csvFile:
             csv_writer = csv.DictWriter(csvFile, fieldnames=fieldnames)
             csv_writer.writerow({'time': f'{self.k.simulation.time:.0f}', 'reward': f'{reward:.4f}',
@@ -321,7 +324,7 @@ class SingleLightEnv(Env):
                                  'P7': self.current_phase_timings[6], 'P15': self.current_phase_timings[7],
                                  'Delay': self.k.traffic_light.get_intersection_delay(self.node_id),
                                  "period": self.k.traffic_light.get_replication_name(self.node_id)
-                                 })
+                                 })'''
 
         return reward
 

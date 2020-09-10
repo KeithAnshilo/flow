@@ -271,7 +271,7 @@ class AimsunKernelTrafficLight(KernelTrafficLight):
         """
         return self.kernel_api.get_incoming_edges(node_id)
 
-    def get_cumulative_queue_length(self, section_id):
+    def get_cumulative_queue_length(self, section_id, phase_num):
         """
         Gets a section's cumulative queue length
 
@@ -282,13 +282,15 @@ class AimsunKernelTrafficLight(KernelTrafficLight):
         ----------
         section_id : int
             the id of the section
+        phase_num : int
+            the id of the phase
 
         Returns
         -------
         float
             the cumulative queue length
         """
-        return self.kernel_api.get_cumulative_queue_length(section_id)
+        return self.kernel_api.get_cumulative_queue_length(section_id, phase_num)
 
     def get_detectors_on_edge(self, edge_id):
         """

@@ -18,13 +18,19 @@ def get_replication_name(node_id):  # cj28
     return rep_name
 
 
-def get_cumulative_queue_length(section_id):
+def get_cumulative_queue_length(section_id, phase_num):
+    lane_ids = {400: {9: [1], 3: [2, 3, 4]},  # left
+                22208: {5: [1, 2], 15: [3, 4, 5]},  # top
+                568: {1: [1], 11: [2, 3, 4]},  # right
+                22211: {13: [1, 2], 7: [3, 4, 5]}  # bottom
+                }
+
     catalog = model.getCatalog()
     section = catalog.find(section_id)
-    num_lanes = section.getNbLanesAtPos(section.length2D())
-    queue = sum(aapi.AKIEstGetCurrentStatisticsSectionLane(section_id, i, 0).LongQueueAvg for i in range(num_lanes))
+    phase_queue = sum(aapi.AKIEstGetCurrentStatisticsSectionLane(section_id, i, 0).LongQueueAvg
+                      for i in lane_ids.get(section_id).get(phase_num))
 
-    return queue*length_car/section.length2D()
+    return phase_queue*length_car/section.length2D()
 
 
 def set_replication_seed(seed):

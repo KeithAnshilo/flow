@@ -657,9 +657,9 @@ def threaded_client(conn, **kwargs):
 
             elif data == ac.INT_GET_CUME_QUEUE_LENGTH:
                 send_message(conn, in_format='i', values=(0,))
-                section_id, = retrieve_message(conn, 'i')
+                section_id, phase_num = retrieve_message(conn, 'i i')
 
-                cume_queue_length = cp.get_cumulative_queue_length(section_id)
+                cume_queue_length = cp.get_cumulative_queue_length(section_id, phase_num)
 
                 send_message(conn, in_format='f', values=(cume_queue_length,))
 
