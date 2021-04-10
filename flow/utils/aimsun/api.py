@@ -836,3 +836,22 @@ class FlowAimsunAPI(object):
                            in_format='i',
                            values=(seed,),
                            out_format=None)
+                           
+    def get_replication_name(self, node_id): #cj28
+        """
+        Gets the intersection's offset
+        Parameters
+        ----------
+        node_id : int
+            the node id of the intersection
+        Returns
+        -------
+        int
+            the offset of the intersection
+        """
+        rep_name,rep_seed, = self._send_command(ac.INT_GET_REPLICATION_NAME,
+                                     in_format='i',
+                                     values=(node_id,),
+                                     out_format='i i')
+
+        return rep_name, rep_seed

@@ -104,6 +104,21 @@ class AimsunKernelTrafficLight(KernelTrafficLight):
             list of current phases as ints
         """
         return self.kernel_api.change_intersection_offset(node_id, offset)
+    
+    def get_replication_name(self, node_id): #cj28
+        """
+        Gets the replication name
+        Parameters
+        ----------
+        node_id : int
+            the node id of the intersection
+        Returns
+        -------
+        int
+            the replication id/name
+        """
+        return self.kernel_api.get_replication_name(node_id)
+
 
     def get_incoming_edges(self, node_id):
         """

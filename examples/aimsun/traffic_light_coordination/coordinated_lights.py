@@ -140,7 +140,8 @@ class CoordinatedEnv(Env):
 
         print(f'{self.k.simulation.time:.0f}', '\t', f'{reward:.2f}', '\t', self.current_offset.flatten())
         
-        csv_dumps = [self.k.simulation.time,reward]
+        rep_name, rep_seed = self.k.traffic_light.get_replication_name(self.target_nodes[0])
+        csv_dumps = [self.k.simulation.time,rep_name,rep_seed,reward]
         with open('reward_dumps.csv','a') as f_object:
             writer_object = writer(f_object)
             writer_object.writerow(csv_dumps)

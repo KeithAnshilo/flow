@@ -540,6 +540,15 @@ def threaded_client(conn, **kwargs):
                 seed, = retrieve_message(conn, 'i')
 
                 cp.set_replication_seed(seed)
+            
+            elif data == ac.INT_GET_REPLICATION_NAME:
+                send_message(conn, in_format='i', values=(0,))
+                node_id, = retrieve_message(conn, 'i')
+
+                rep_name, rep_seed = cp.get_replication_name(node_id)
+
+                send_message(conn, in_format='i i', values=(rep_name,rep_seed,))
+
 
             # in case the message is unknown, return -1001
             else:
@@ -590,26 +599,37 @@ def AAPIManage(time, timeSta, timeTrans, acycle):
 
 
 def AAPIPostManage(time, timeSta, timeTrans, acycle):
-    """Execute commands after an Aimsun simulation step."""\
+    """Execute commands after an Aimsun simulation step."""
+    from csv import writer
 
     catalog = model.getCatalog()
-    node = catalog.find(node_id)
-    in_edges = node.getEntranceSections() + node.getExitSections()
-    edge_ids = set([edge.getId() for edge in in_edges])
+    target_nodes = [3369, 3341, 3370, 3344, 3329]
+
+    rep_name = aimsun_api.ANGConnGetReplicationId()
+
+    replications = model.getCatalog().getObjectsByType(model.getType("GKReplication"))
+    for replication in replications.values():
+        rep_seed = replication.getRandomSeed()
+    
+    in_edges = []
+    for node_id in target_nodes:
+        node = catalog.find(node_id)
+        in_edges += node.getEntranceSections() + node.getExitSections()
+        edge_ids = set([edge.getId() for edge in in_edges])
 
     travel_time = 0
-    for edges in edge_ids:
-        travel_time += aimsun_api.AKIEstGetCurrentStatisticsSection(edges,0)
-    
-    ave_travel_time = travel_time/len(edge_ids)
+    if time % 900 == 0:
+        for edges in edge_ids:
+            travel_time += aimsun_api.AKIEstGetCurrentStatisticsSection(edges,0).TTa 
+        
+        ave_travel_time = travel_time/len(edge_ids)
 
-    csv_dumps = [time,ave_travel_time]
-    with open('/home/kadiaz/flow/flow/utils/aimsun/TT_dumps.csv','a') as f_object:
-        writer_object = writer(f_object)
-        writer_object.writerow(csv_dumps)
-        f_object.close() 
-
-
+        csv_dumps = [time,rep_name,rep_seed,ave_travel_time]
+        with open('TT_dumps.csv','a') as f_object:
+            writer_object = writer(f_object)
+            writer_object.writerow(csv_dumps)
+            f_object.close()
+     
     return 0
 
 

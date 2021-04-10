@@ -143,3 +143,5 @@ DET_SET_DETECTION_INTERVAL = 0x25
 
 #: get the edge name in aimsun
 GET_EDGE_NAME = 0x26
+#get replication name
+INT_GET_REPLICATION_NAME = 0x27
