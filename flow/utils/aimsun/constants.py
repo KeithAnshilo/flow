@@ -121,27 +121,6 @@ INT_GET_CUME_QUEUE_LENGTH = 0x20
 #: set replication seed
 REPL_SET_SEED = 0x21
 
-#: get ids
-INT_GET_CONTROL_IDS = 0x27
-
-#: get green phases
-INT_GET_GREEN_PHASES = 0x28
-
-#: get total green phase timing in a ring
-INT_GET_CYCLE_LENGTH = 0x2A
-
-#: set intersection phase
-INT_CHANGE_PHASE_DURATION = 0x29
-
-#: get duration phase
-INT_GET_DURATION_PHASE = 0x2B
-
-#: set intersection phase acyclical
-INT_CHANGE_PHASE_DURATION_ACYCLE = 0x30
-
-# get edge_flow
-INT_GET_EDGE_ST = 0x31
-
 ###############################################################################
 #                           Detector Commands                            #
 ###############################################################################
@@ -157,9 +136,6 @@ DET_SET_STAT_INTERVAL = 0x24
 
 #: set detection interval for the scenairo
 DET_SET_DETECTION_INTERVAL = 0x25
-
-#: get number detector lanes
-DET_GET_DETECTOR_LANES = 0x2C
 
 ###############################################################################
 #                               Network Commands                              #

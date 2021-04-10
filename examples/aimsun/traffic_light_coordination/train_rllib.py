@@ -120,7 +120,7 @@ if __name__ == "__main__":
             "stop": {
                 "training_iteration": RLLIB_TRAINING_ITERATIONS,
             },
-            "restore": '/home/kadiaz/ray_results/coordinated_traffic_lights/PPO_CoordinatedEnv-v0_0_2020-01-27_22-18-40pt7lzaxo/checkpoint_650/checkpoint-650',
+            #"restore": '/home/kadiaz/ray_results/coordinated_traffic_lights/PPO_CoordinatedEnv-v0_0_2020-01-27_22-18-40pt7lzaxo/checkpoint_650/checkpoint-650',
             # "local_dir": os.path.abspath("./ray_results"),
             "keep_checkpoints_num": 3
         }

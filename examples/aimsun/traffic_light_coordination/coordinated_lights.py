@@ -13,7 +13,7 @@ ADDITIONAL_ENV_PARAMS = {'target_nodes': [3369, 3341, 3370, 3344, 3329],
                          'detection_interval': (0, 15, 0),
                          'statistical_interval': (0, 15, 0),
                          'replication_list': ['Replication 8050297',  # 5-11
-                                              # 'Replication 8050315',  # 10-14
+                                              'Replication 8050315',  # 10-14
                                               'Replication 8050322']}  # 14-21
 # the replication list should be copied in load.py
 
@@ -126,6 +126,9 @@ class CoordinatedEnv(Env):
 
     def compute_reward(self, rl_actions, **kwargs):
         """Computes the sum of queue lengths at all intersections in the network."""
+
+        from csv import writer
+
         reward = 0
         for section_id in self.past_cumul_queue:
             current_cumul_queue = self.k.traffic_light.get_cumulative_queue_length(section_id)
@@ -136,6 +139,12 @@ class CoordinatedEnv(Env):
             reward -= (queue**2) * 100
 
         print(f'{self.k.simulation.time:.0f}', '\t', f'{reward:.2f}', '\t', self.current_offset.flatten())
+        
+        csv_dumps = [self.k.simulation.time,reward]
+        with open('reward_dumps.csv','a') as f_object:
+            writer_object = writer(f_object)
+            writer_object.writerow(csv_dumps)
+            f_object.close()
 
         return reward
 

@@ -480,14 +480,6 @@ def threaded_client(conn, **kwargs):
 
                 send_message(conn, in_format='i', values=(offset,))
 
-            elif data == ac.INT_GET_EDGE_ST:
-                send_message(conn, in_format='i', values=(0,))
-                section_id, = retrieve_message(conn, 'i')
-
-                edge_flow = cp.get_globaledge_stoptime(section_id)
-
-                send_message(conn, in_format='f', values=(edge_flow,))
-
             elif data == ac.INT_CHANGE_OFFSET:
                 send_message(conn, in_format='i', values=(0,))
                 node_id, offset = retrieve_message(conn, 'i f')
@@ -496,57 +488,6 @@ def threaded_client(conn, **kwargs):
                 timeSta = kwargs.get('timeSta')
                 acycle = kwargs.get('acycle')
                 cp.change_offset(node_id, offset, time, timeSta, acycle)
-
-            elif data == ac.INT_GET_DURATION_PHASE:  # cj
-                send_message(conn, in_format='i', values=(0,))
-                node_id, phase = retrieve_message(conn, 'i i')
-
-                normalDuration, maxDuration, minDuration = cp.get_duration_phase(node_id, phase, timeSta)
-
-                send_message(conn, in_format='f f f', values=(normalDuration, maxDuration, minDuration,))
-
-            elif data == ac.INT_GET_CYCLE_LENGTH:  # cj
-                send_message(conn, in_format='i', values=(0,))
-                node_id, control_id = retrieve_message(conn, 'i i')
-
-                control_cycle = cp.get_cycle_length(node_id, control_id)
-
-                send_message(conn, in_format='f', values=(control_cycle,))
-
-            elif data == ac.INT_GET_CONTROL_IDS:
-                send_message(conn, in_format='i', values=(0,))
-                node_id, = retrieve_message(conn, 'i')
-
-                control_id, num_rings = cp.get_control_ids(node_id)
-
-                send_message(conn, in_format='i i', values=(control_id, num_rings,))
-
-            elif data == ac.INT_GET_GREEN_PHASES:
-                send_message(conn, in_format='i', values=(0,))
-                node_id, ring_id = retrieve_message(conn, 'i i')
-
-                green_phases = cp.get_green_phases(node_id, ring_id, timeSta)
-                output = ','.join(str(i) for i in green_phases)
-
-                send_message(conn, in_format='str', values=(output,))
-
-            elif data == ac.INT_CHANGE_PHASE_DURATION:
-                send_message(conn, in_format='i', values=(0,))
-                node_id, phase, duration, maxout = retrieve_message(conn, 'i i f f')
-
-                time = kwargs.get('time')
-                timeSta = kwargs.get('timeSta')
-                acycle = kwargs.get('acycle')
-                cp.change_phase_duration(node_id, phase, duration, maxout, time, timeSta, acycle)
-
-            elif data == ac.INT_CHANGE_PHASE_DURATION_ACYCLE:
-                send_message(conn, in_format='i', values=(0,))
-                node_id, phase, duration = retrieve_message(conn, 'i i f')
-
-                time = kwargs.get('time')
-                timeSta = kwargs.get('timeSta')
-                acycle = kwargs.get('acycle')
-                cp.change_phase_duration_acycle(node_id, phase, duration, time, timeSta, acycle)
 
             elif data == ac.INT_GET_IN_EDGES:
                 send_message(conn, in_format='i', values=(0,))
@@ -571,15 +512,6 @@ def threaded_client(conn, **kwargs):
 
                 detector_list = cp.get_detector_ids(edge_id)
                 output = json.dumps(detector_list)
-
-                send_message(conn, in_format='str', values=(output,))
-
-            elif data == ac.DET_GET_DETECTOR_LANES:  # cj
-                send_message(conn, in_format='i', values=(0,))
-                edge_id, = retrieve_message(conn, 'i')
-
-                detector_lanes = cp.get_detector_lanes(edge_id)
-                output = json.dumps(detector_lanes)
 
                 send_message(conn, in_format='str', values=(output,))
 
@@ -629,10 +561,18 @@ def AAPIInit():
     return 0
 
 
+interval = 900 # detection_interval
+
 def AAPIManage(time, timeSta, timeTrans, acycle):
     """Execute commands before an Aimsun simulation step."""
     # Create a thread when data needs to be sent back to FLOW
-    if not time % (900 * 0.8):  # DETECTOR_STEP * SIM_STEP (copy from train_rllib.py)
+    global time_consumed, occurence, green_phases
+    #for node_id in target_nodes:
+       # get_green_time(node_id, time, timeSta)
+
+    delta = 0.8/2
+    if ((time % interval) > -delta and (time % interval) < delta) or ((time % interval) > interval-delta and (time % interval) < interval+delta):
+
         # tcp/ip connection from the aimsun process
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -650,7 +590,26 @@ def AAPIManage(time, timeSta, timeTrans, acycle):
 
 
 def AAPIPostManage(time, timeSta, timeTrans, acycle):
-    """Execute commands after an Aimsun simulation step."""
+    """Execute commands after an Aimsun simulation step."""\
+
+    catalog = model.getCatalog()
+    node = catalog.find(node_id)
+    in_edges = node.getEntranceSections() + node.getExitSections()
+    edge_ids = set([edge.getId() for edge in in_edges])
+
+    travel_time = 0
+    for edges in edge_ids:
+        travel_time += aimsun_api.AKIEstGetCurrentStatisticsSection(edges,0)
+    
+    ave_travel_time = travel_time/len(edge_ids)
+
+    csv_dumps = [time,ave_travel_time]
+    with open('/home/kadiaz/flow/flow/utils/aimsun/TT_dumps.csv','a') as f_object:
+        writer_object = writer(f_object)
+        writer_object.writerow(csv_dumps)
+        f_object.close() 
+
+
     return 0
 
 
