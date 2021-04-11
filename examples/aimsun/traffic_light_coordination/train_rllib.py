@@ -24,7 +24,7 @@ DETECTOR_STEP = 900  # copy to run.py #K:changed from 5 minuts to 15 mins
 TIME_HORIZON = 3600*4 - DETECTOR_STEP  # 14,100 #K: 13,500
 HORIZON = int(TIME_HORIZON//SIM_STEP)
 
-RLLIB_N_CPUS = 2
+RLLIB_N_CPUS = 8
 RLLIB_HORIZON = int(TIME_HORIZON//DETECTOR_STEP)  # 47 #K: down to 15
 
 RLLIB_N_ROLLOUTS = 3  # copy to coordinated_lights.py
@@ -75,10 +75,10 @@ def setup_exps(version=0):
     agent_cls = get_agent_class(alg_run)
     config = agent_cls._default_config.copy()
     config["num_workers"] = RLLIB_N_CPUS
-    config["sgd_minibatch_size"] = 16
-    config["train_batch_size"] = RLLIB_HORIZON * RLLIB_N_ROLLOUTS * RLLIB_N_CPUS
+    config["train_batch_size"] = RLLIB_HORIZON * RLLIB_N_ROLLOUTS
+    config["sgd_minibatch_size"] = min(16*1024,config["train_batch_size"])	
     config["gamma"] = 0.999  # discount rate
-    config["sample_batch_size"] = RLLIB_HORIZON * RLLIB_N_ROLLOUTS
+    #config["sample_batch_size"] = RLLIB_HORIZON * RLLIB_N_ROLLOUTS
     config["model"].update({"fcnet_hiddens": [64, 64, 64]})
     config["use_gae"] = True
     config["lambda"] = 0.97
@@ -86,9 +86,9 @@ def setup_exps(version=0):
     config["num_sgd_iter"] = 10
     config['clip_actions'] = False  # (ev) temporary ray bug
     config["horizon"] = RLLIB_HORIZON  # not same as env horizon.
-    config["vf_loss_coeff"] = 1e-8
-    config["vf_clip_param"] = 600
-    config["lr"] = 5e-4
+    #config["vf_loss_coeff"] = 1e-8
+    #config["vf_clip_param"] = 600
+    config["lr"] = 3e-4
 
     # save the flow params for replay
     flow_json = json.dumps(
@@ -120,7 +120,7 @@ if __name__ == "__main__":
             "stop": {
                 "training_iteration": RLLIB_TRAINING_ITERATIONS,
             },
-            #"restore": '/home/kadiaz/ray_results/coordinated_traffic_lights/PPO_CoordinatedEnv-v0_0_2020-01-27_22-18-40pt7lzaxo/checkpoint_650/checkpoint-650',
+            #"restore": '/home/damian/ray_results/coordinated_traffic_lights/PPO_CoordinatedEnv-v0_53f4b590_2021-04-10_22-23-328d04yhrc/checkpoint_74/checkpoint-74',	
             # "local_dir": os.path.abspath("./ray_results"),
             "keep_checkpoints_num": 3
         }
