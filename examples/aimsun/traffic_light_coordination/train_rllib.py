@@ -120,8 +120,8 @@ if __name__ == "__main__":
             "stop": {
                 "training_iteration": RLLIB_TRAINING_ITERATIONS,
             },
-            #"restore": '/home/damian/ray_results/coordinated_traffic_lights/PPO_CoordinatedEnv-v0_53f4b590_2021-04-10_22-23-328d04yhrc/checkpoint_74/checkpoint-74',	
+            "restore": '/home/damian/ray_results/coordinated_traffic_lights/PPO_CoordinatedEnv-v0_8e8aee76_2021-04-11_15-50-17_r5pwxba/checkpoint_56/checkpoint-56',	
             # "local_dir": os.path.abspath("./ray_results"),
             "keep_checkpoints_num": 3
         }
-    }, resume=False)
+    }, resume=True)
