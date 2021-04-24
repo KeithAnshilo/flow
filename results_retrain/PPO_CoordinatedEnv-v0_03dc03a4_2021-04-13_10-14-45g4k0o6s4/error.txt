@@ -1,0 +1,47 @@
+Failure # 1 (occurred at 2021-04-16_21-07-17)
+Traceback (most recent call last):
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/tune/trial_runner.py", line 426, in _process_trial
+    result = self.trial_executor.fetch_result(trial)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/tune/ray_trial_executor.py", line 378, in fetch_result
+    result = ray.get(trial_future[0], DEFAULT_GET_TIMEOUT)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/worker.py", line 1457, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(RayOutOfMemoryError): [36mray::PPO.train()[39m (pid=733492, ip=192.168.122.169)
+  File "python/ray/_raylet.pyx", line 636, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 619, in ray._raylet.execute_task.function_executor
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 444, in train
+    raise e
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 433, in train
+    result = Trainable.train(self)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/tune/trainable.py", line 176, in train
+    result = self._train()
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer_template.py", line 140, in _train
+    res = self.collect_metrics()
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 753, in collect_metrics
+    selected_workers=selected_workers)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/optimizers/policy_optimizer.py", line 108, in collect_metrics
+    timeout_seconds=timeout_seconds)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/evaluation/metrics.py", line 75, in collect_episodes
+    metric_lists = ray_get_and_free(collected)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/utils/memory.py", line 33, in ray_get_and_free
+    result = ray.get(object_ids)
+ray.exceptions.RayTaskError(RayOutOfMemoryError): [36mray::RolloutWorker[39m (pid=733489, ip=192.168.122.169)
+  File "python/ray/_raylet.pyx", line 627, in ray._raylet.execute_task
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/memory_monitor.py", line 130, in raise_if_low_memory
+    self.error_threshold))
+ray.memory_monitor.RayOutOfMemoryError: More than 95% of the memory on node cxteam-sandbox is used (29.18 / 30.62 GB). The top 10 memory consumers are:
+
+PID	MEM	COMMAND
+734127	2.96GiB	/home/damian/Aimsun_Next_8_4_2/.Aimsun_Next -script /home/damian/flow/flow/utils/aimsun/load.py 4156
+734142	2.9GiB	/home/damian/Aimsun_Next_8_4_2/.Aimsun_Next -script /home/damian/flow/flow/utils/aimsun/load.py 3913
+734120	2.87GiB	/home/damian/Aimsun_Next_8_4_2/.Aimsun_Next -script /home/damian/flow/flow/utils/aimsun/load.py 5342
+734140	2.86GiB	/home/damian/Aimsun_Next_8_4_2/.Aimsun_Next -script /home/damian/flow/flow/utils/aimsun/load.py 4339
+734124	2.85GiB	/home/damian/Aimsun_Next_8_4_2/.Aimsun_Next -script /home/damian/flow/flow/utils/aimsun/load.py 4146
+734113	2.84GiB	/home/damian/Aimsun_Next_8_4_2/.Aimsun_Next -script /home/damian/flow/flow/utils/aimsun/load.py 4839
+734141	2.81GiB	/home/damian/Aimsun_Next_8_4_2/.Aimsun_Next -script /home/damian/flow/flow/utils/aimsun/load.py 3504
+734131	2.73GiB	/home/damian/Aimsun_Next_8_4_2/.Aimsun_Next -script /home/damian/flow/flow/utils/aimsun/load.py 5173
+733791	0.73GiB	/home/damian/Aimsun_Next_8_4_2/.Aimsun_Next -script /home/damian/flow/flow/utils/aimsun/load.py 4723
+733492	0.41GiB	ray::PPO.train()
+
+In addition, up to 0.1 GiB of shared memory is currently being used by the Ray object store. You can set the object store size with the `object_store_memory` parameter when starting Ray, and the max Redis size with `redis_max_memory`. Note that Ray assumes all system memory is available for use by workers. If your system has other applications running, you should manually set these memory limits to a lower value.
+

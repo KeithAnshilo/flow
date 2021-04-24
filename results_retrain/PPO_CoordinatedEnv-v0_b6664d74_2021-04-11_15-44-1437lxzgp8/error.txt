@@ -1,0 +1,168 @@
+Failure # 1 (occurred at 2021-04-11_15-44-17)
+Traceback (most recent call last):
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/tune/trial_runner.py", line 426, in _process_trial
+    result = self.trial_executor.fetch_result(trial)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/tune/ray_trial_executor.py", line 378, in fetch_result
+    result = ray.get(trial_future[0], DEFAULT_GET_TIMEOUT)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/worker.py", line 1457, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(ValueError): [36mray::PPO.__init__()[39m (pid=1801925, ip=192.168.122.169)
+  File "python/ray/_raylet.pyx", line 626, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 634, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 636, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 619, in ray._raylet.execute_task.function_executor
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer_template.py", line 90, in __init__
+    Trainer.__init__(self, config, env, logger_creator)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 398, in __init__
+    Trainable.__init__(self, config, logger_creator)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/tune/trainable.py", line 96, in __init__
+    self._setup(copy.deepcopy(self.config))
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 523, in _setup
+    self._init(self.config, self.env_creator)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer_template.py", line 94, in _init
+    validate_config(config)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/ppo/ppo.py", line 156, in validate_config
+    config["sgd_minibatch_size"], config["train_batch_size"]))
+ValueError: Minibatch size 4000 must be <= train batch size 45.
+
+Failure # 2 (occurred at 2021-04-11_15-44-20)
+Traceback (most recent call last):
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/tune/trial_runner.py", line 426, in _process_trial
+    result = self.trial_executor.fetch_result(trial)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/tune/ray_trial_executor.py", line 378, in fetch_result
+    result = ray.get(trial_future[0], DEFAULT_GET_TIMEOUT)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/worker.py", line 1457, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(ValueError): [36mray::PPO.__init__()[39m (pid=1801922, ip=192.168.122.169)
+  File "python/ray/_raylet.pyx", line 626, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 634, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 636, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 619, in ray._raylet.execute_task.function_executor
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer_template.py", line 90, in __init__
+    Trainer.__init__(self, config, env, logger_creator)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 398, in __init__
+    Trainable.__init__(self, config, logger_creator)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/tune/trainable.py", line 96, in __init__
+    self._setup(copy.deepcopy(self.config))
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 523, in _setup
+    self._init(self.config, self.env_creator)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer_template.py", line 94, in _init
+    validate_config(config)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/ppo/ppo.py", line 156, in validate_config
+    config["sgd_minibatch_size"], config["train_batch_size"]))
+ValueError: Minibatch size 4000 must be <= train batch size 45.
+
+Failure # 3 (occurred at 2021-04-11_15-44-23)
+Traceback (most recent call last):
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/tune/trial_runner.py", line 426, in _process_trial
+    result = self.trial_executor.fetch_result(trial)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/tune/ray_trial_executor.py", line 378, in fetch_result
+    result = ray.get(trial_future[0], DEFAULT_GET_TIMEOUT)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/worker.py", line 1457, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(ValueError): [36mray::PPO.__init__()[39m (pid=1801928, ip=192.168.122.169)
+  File "python/ray/_raylet.pyx", line 626, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 634, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 636, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 619, in ray._raylet.execute_task.function_executor
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer_template.py", line 90, in __init__
+    Trainer.__init__(self, config, env, logger_creator)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 398, in __init__
+    Trainable.__init__(self, config, logger_creator)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/tune/trainable.py", line 96, in __init__
+    self._setup(copy.deepcopy(self.config))
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 523, in _setup
+    self._init(self.config, self.env_creator)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer_template.py", line 94, in _init
+    validate_config(config)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/ppo/ppo.py", line 156, in validate_config
+    config["sgd_minibatch_size"], config["train_batch_size"]))
+ValueError: Minibatch size 4000 must be <= train batch size 45.
+
+Failure # 4 (occurred at 2021-04-11_15-44-26)
+Traceback (most recent call last):
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/tune/trial_runner.py", line 426, in _process_trial
+    result = self.trial_executor.fetch_result(trial)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/tune/ray_trial_executor.py", line 378, in fetch_result
+    result = ray.get(trial_future[0], DEFAULT_GET_TIMEOUT)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/worker.py", line 1457, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(ValueError): [36mray::PPO.__init__()[39m (pid=1801926, ip=192.168.122.169)
+  File "python/ray/_raylet.pyx", line 626, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 634, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 636, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 619, in ray._raylet.execute_task.function_executor
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer_template.py", line 90, in __init__
+    Trainer.__init__(self, config, env, logger_creator)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 398, in __init__
+    Trainable.__init__(self, config, logger_creator)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/tune/trainable.py", line 96, in __init__
+    self._setup(copy.deepcopy(self.config))
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 523, in _setup
+    self._init(self.config, self.env_creator)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer_template.py", line 94, in _init
+    validate_config(config)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/ppo/ppo.py", line 156, in validate_config
+    config["sgd_minibatch_size"], config["train_batch_size"]))
+ValueError: Minibatch size 4000 must be <= train batch size 45.
+
+Failure # 5 (occurred at 2021-04-11_15-44-28)
+Traceback (most recent call last):
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/tune/trial_runner.py", line 426, in _process_trial
+    result = self.trial_executor.fetch_result(trial)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/tune/ray_trial_executor.py", line 378, in fetch_result
+    result = ray.get(trial_future[0], DEFAULT_GET_TIMEOUT)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/worker.py", line 1457, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(ValueError): [36mray::PPO.__init__()[39m (pid=1801924, ip=192.168.122.169)
+  File "python/ray/_raylet.pyx", line 626, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 634, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 636, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 619, in ray._raylet.execute_task.function_executor
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer_template.py", line 90, in __init__
+    Trainer.__init__(self, config, env, logger_creator)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 398, in __init__
+    Trainable.__init__(self, config, logger_creator)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/tune/trainable.py", line 96, in __init__
+    self._setup(copy.deepcopy(self.config))
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 523, in _setup
+    self._init(self.config, self.env_creator)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer_template.py", line 94, in _init
+    validate_config(config)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/ppo/ppo.py", line 156, in validate_config
+    config["sgd_minibatch_size"], config["train_batch_size"]))
+ValueError: Minibatch size 4000 must be <= train batch size 45.
+
+Failure # 6 (occurred at 2021-04-11_15-44-31)
+Traceback (most recent call last):
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/tune/trial_runner.py", line 426, in _process_trial
+    result = self.trial_executor.fetch_result(trial)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/tune/ray_trial_executor.py", line 378, in fetch_result
+    result = ray.get(trial_future[0], DEFAULT_GET_TIMEOUT)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/worker.py", line 1457, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(ValueError): [36mray::PPO.__init__()[39m (pid=1801923, ip=192.168.122.169)
+  File "python/ray/_raylet.pyx", line 626, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 634, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 636, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 619, in ray._raylet.execute_task.function_executor
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer_template.py", line 90, in __init__
+    Trainer.__init__(self, config, env, logger_creator)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 398, in __init__
+    Trainable.__init__(self, config, logger_creator)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/tune/trainable.py", line 96, in __init__
+    self._setup(copy.deepcopy(self.config))
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer.py", line 523, in _setup
+    self._init(self.config, self.env_creator)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/trainer_template.py", line 94, in _init
+    validate_config(config)
+  File "/home/damian/anaconda3/envs/flow/lib/python3.7/site-packages/ray/rllib/agents/ppo/ppo.py", line 156, in validate_config
+    config["sgd_minibatch_size"], config["train_batch_size"]))
+ValueError: Minibatch size 4000 must be <= train batch size 45.
+
