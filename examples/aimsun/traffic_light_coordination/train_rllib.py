@@ -19,7 +19,7 @@ except ImportError:
 SIM_STEP = 0.8  # copy to run.py
 
 # hardcoded to AIMSUN's statistics update interval (5 minutes)
-DETECTOR_STEP = 300  # copy to run.py #K:changed from 5 minuts to 15 mins
+DETECTOR_STEP = 1800  # copy to run.py #K:changed from 5 minuts to 15 mins
 
 TIME_HORIZON = 3600*4 - DETECTOR_STEP  # 14,100 #K: 13,500
 HORIZON = int(TIME_HORIZON//SIM_STEP)

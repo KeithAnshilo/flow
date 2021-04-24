@@ -570,7 +570,7 @@ def AAPIInit():
     return 0
 
 
-interval = 300 # detection_interval
+interval = 1800 # detection_interval
 
 def AAPIManage(time, timeSta, timeTrans, acycle):
     """Execute commands before an Aimsun simulation step."""
