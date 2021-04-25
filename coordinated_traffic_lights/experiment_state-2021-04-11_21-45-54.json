@@ -1,0 +1,1028 @@
+{
+  "checkpoints": [
+    {
+      "trainable_name": "PPO",
+      "trial_id": "8e8aee76",
+      "config": {
+        "num_workers": 8,
+        "num_envs_per_worker": 1,
+        "sample_batch_size": 200,
+        "batch_mode": "truncate_episodes",
+        "num_gpus": 0,
+        "train_batch_size": 45,
+        "model": {
+          "conv_filters": null,
+          "conv_activation": "relu",
+          "fcnet_activation": "tanh",
+          "fcnet_hiddens": [
+            64,
+            64,
+            64
+          ],
+          "free_log_std": false,
+          "no_final_linear": false,
+          "vf_share_layers": true,
+          "use_lstm": false,
+          "max_seq_len": 20,
+          "lstm_cell_size": 256,
+          "lstm_use_prev_action_reward": false,
+          "state_shape": null,
+          "framestack": true,
+          "dim": 84,
+          "grayscale": false,
+          "zero_mean": true,
+          "custom_preprocessor": null,
+          "custom_model": null,
+          "custom_action_dist": null,
+          "custom_options": {}
+        },
+        "optimizer": {},
+        "gamma": 0.999,
+        "horizon": 15,
+        "soft_horizon": false,
+        "no_done_at_end": false,
+        "env_config": {
+          "flow_params": "{\n    \"env\": {\n        \"additional_params\": {\n            \"detection_interval\": [\n                0,\n                15,\n                0\n            ],\n            \"num_advanced\": 1,\n            \"num_incoming_edges_per_node\": 4,\n            \"num_measures\": 2,\n            \"num_stopbars\": 3,\n            \"observed_nodes\": [\n                3386,\n                3371,\n                3362,\n                3373\n            ],\n            \"replication_list\": [\n                \"Replication 8050297\",\n                \"Replication 8050315\",\n                \"Replication 8050322\"\n            ],\n            \"statistical_interval\": [\n                0,\n                15,\n                0\n            ],\n            \"target_nodes\": [\n                3369,\n                3341,\n                3370,\n                3344,\n                3329\n            ]\n        },\n        \"clip_actions\": true,\n        \"evaluate\": false,\n        \"horizon\": 16874,\n        \"sims_per_step\": 1125,\n        \"warmup_steps\": 1\n    },\n    \"env_name\": \"coordinated_lights.CoordinatedEnv\",\n    \"exp_tag\": \"coordinated_traffic_lights\",\n    \"initial\": {\n        \"additional_params\": {},\n        \"bunching\": 0,\n        \"edges_distribution\": \"all\",\n        \"lanes_distribution\": Infinity,\n        \"min_gap\": 0,\n        \"perturbation\": 0.0,\n        \"shuffle\": false,\n        \"spacing\": \"uniform\",\n        \"x0\": 0\n    },\n    \"net\": {\n        \"additional_params\": {},\n        \"inflows\": {\n            \"_InFlows__flows\": []\n        },\n        \"osm_path\": null,\n        \"template\": \"/home/damian/flow/examples/aimsun/traffic_light_coordination/scenario_one_hour.ang\"\n    },\n    \"network\": \"coordinated_lights.CoordinatedNetwork\",\n    \"sim\": {\n        \"centroid_config_name\": \"Centroid Configuration 8040652\",\n        \"color_vehicles\": true,\n        \"emission_path\": null,\n        \"experiment_name\": \"Micro SRC Experiment 867\",\n        \"network_name\": \"Dynamic Scenario 866\",\n        \"pxpm\": 2,\n        \"render\": false,\n        \"replication_name\": \"Replication 8050297\",\n        \"restart_instance\": false,\n        \"save_render\": false,\n        \"show_radius\": false,\n        \"sight_radius\": 25,\n        \"sim_step\": 0.8,\n        \"subnetwork_name\": null\n    },\n    \"simulator\": \"aimsun\",\n    \"veh\": []\n}",
+          "run": "PPO"
+        },
+        "env": "CoordinatedEnv-v0",
+        "clip_rewards": null,
+        "clip_actions": false,
+        "preprocessor_pref": "deepmind",
+        "lr": 0.0003,
+        "monitor": false,
+        "log_level": "WARN",
+        "callbacks": {
+          "on_episode_start": null,
+          "on_episode_step": null,
+          "on_episode_end": null,
+          "on_sample_end": null,
+          "on_train_result": null,
+          "on_postprocess_traj": null
+        },
+        "ignore_worker_failures": false,
+        "log_sys_usage": true,
+        "eager": false,
+        "eager_tracing": false,
+        "no_eager_on_workers": false,
+        "evaluation_interval": null,
+        "evaluation_num_episodes": 10,
+        "evaluation_config": {},
+        "sample_async": false,
+        "observation_filter": "NoFilter",
+        "synchronize_filters": true,
+        "tf_session_args": {
+          "intra_op_parallelism_threads": 2,
+          "inter_op_parallelism_threads": 2,
+          "gpu_options": {
+            "allow_growth": true
+          },
+          "log_device_placement": false,
+          "device_count": {
+            "CPU": 1
+          },
+          "allow_soft_placement": true
+        },
+        "local_tf_session_args": {
+          "intra_op_parallelism_threads": 8,
+          "inter_op_parallelism_threads": 8
+        },
+        "compress_observations": false,
+        "collect_metrics_timeout": 180,
+        "metrics_smoothing_episodes": 100,
+        "remote_worker_envs": false,
+        "remote_env_batch_wait_ms": 0,
+        "min_iter_time_s": 0,
+        "timesteps_per_iteration": 0,
+        "seed": null,
+        "num_cpus_per_worker": 1,
+        "num_gpus_per_worker": 0,
+        "custom_resources_per_worker": {},
+        "num_cpus_for_driver": 1,
+        "memory": 0,
+        "object_store_memory": 0,
+        "memory_per_worker": 0,
+        "object_store_memory_per_worker": 0,
+        "input": "sampler",
+        "input_evaluation": [
+          "is",
+          "wis"
+        ],
+        "postprocess_inputs": false,
+        "shuffle_buffer_size": 0,
+        "output": null,
+        "output_compress_columns": [
+          "obs",
+          "new_obs"
+        ],
+        "output_max_file_size": 67108864,
+        "multiagent": {
+          "policies": {},
+          "policy_mapping_fn": null,
+          "policies_to_train": null
+        },
+        "use_gae": true,
+        "lambda": 0.97,
+        "kl_coeff": 0.2,
+        "sgd_minibatch_size": 45,
+        "shuffle_sequences": true,
+        "num_sgd_iter": 10,
+        "lr_schedule": null,
+        "vf_share_layers": false,
+        "vf_loss_coeff": 1.0,
+        "entropy_coeff": 0.0,
+        "entropy_coeff_schedule": null,
+        "clip_param": 0.3,
+        "vf_clip_param": 10.0,
+        "grad_clip": null,
+        "kl_target": 0.02,
+        "simple_optimizer": false
+      },
+      "local_dir": "/home/damian/ray_results/coordinated_traffic_lights",
+      "evaluated_params": {},
+      "experiment_tag": "0",
+      "address": {
+        "_type": "CLOUDPICKLE_FALLBACK",
+        "value": "8004954f000000000000008c0e7261792e74756e652e747269616c948c084c6f636174696f6e9493942981947d94288c08686f73746e616d65948c0f3139322e3136382e3132322e313639948c03706964944a9e6a1d0075622e"
+      },
+      "resources": {
+        "cpu": 1,
+        "gpu": 0,
+        "memory": 0,
+        "object_store_memory": 0,
+        "extra_cpu": 8,
+        "extra_gpu": 0,
+        "extra_memory": 0,
+        "extra_object_store_memory": 0,
+        "custom_resources": {},
+        "extra_custom_resources": {}
+      },
+      "stopping_criterion": {
+        "training_iteration": 1000
+      },
+      "loggers": "80044e2e",
+      "sync_to_driver_fn": "80044e2e",
+      "verbose": true,
+      "max_failures": 999,
+      "last_result": {
+        "episode_reward_max": -860.9495730352379,
+        "episode_reward_min": -6172.563464038406,
+        "episode_reward_mean": -1546.0908165372323,
+        "episode_len_mean": 15.0,
+        "episodes_this_iter": 104,
+        "policy_reward_min": {},
+        "policy_reward_max": {},
+        "policy_reward_mean": {},
+        "custom_metrics": {},
+        "sampler_perf": {
+          "mean_env_wait_ms": 9425.583073134901,
+          "mean_processing_ms": 1147.081404864818,
+          "mean_inference_ms": 2.2905695325192785
+        },
+        "off_policy_estimator": {},
+        "info": {
+          "num_steps_trained": 29925,
+          "num_steps_sampled": 30400,
+          "sample_time_ms": 2162404.624,
+          "load_time_ms": 39.577,
+          "grad_time_ms": 1700.587,
+          "update_time_ms": 319.301,
+          "learner": {
+            "default_policy": {
+              "cur_kl_coeff": 1.0125000476837158,
+              "cur_lr": 0.0003000000142492354,
+              "total_loss": {
+                "_type": "CLOUDPICKLE_FALLBACK",
+                "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b007494624304b7b4694994869452942e"
+              },
+              "policy_loss": {
+                "_type": "CLOUDPICKLE_FALLBACK",
+                "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b0074946243049a2150be94869452942e"
+              },
+              "vf_loss": {
+                "_type": "CLOUDPICKLE_FALLBACK",
+                "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b007494624304bbb4694994869452942e"
+              },
+              "vf_explained_var": {
+                "_type": "CLOUDPICKLE_FALLBACK",
+                "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b007494624304a10eea3194869452942e"
+              },
+              "kl": {
+                "_type": "CLOUDPICKLE_FALLBACK",
+                "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b0074946243042ca5093d94869452942e"
+              },
+              "entropy": {
+                "_type": "CLOUDPICKLE_FALLBACK",
+                "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b0074946243044e2eba4194869452942e"
+              },
+              "entropy_coeff": 0.0
+            }
+          }
+        },
+        "timesteps_this_iter": 1600,
+        "done": false,
+        "timesteps_total": 30400,
+        "episodes_total": 2024,
+        "training_iteration": 19,
+        "experiment_id": "ab6612972a8a44aba021ae1f3498b173",
+        "date": "2021-04-12_03-47-42",
+        "timestamp": 1618170462,
+        "time_this_iter_s": 2274.3037548065186,
+        "time_total_s": 40939.23446774483,
+        "pid": 1927838,
+        "hostname": "cxteam-sandbox",
+        "node_ip": "192.168.122.169",
+        "config": {
+          "num_workers": 8,
+          "num_envs_per_worker": 1,
+          "sample_batch_size": 200,
+          "batch_mode": "truncate_episodes",
+          "num_gpus": 0,
+          "train_batch_size": 45,
+          "model": {
+            "conv_filters": null,
+            "conv_activation": "relu",
+            "fcnet_activation": "tanh",
+            "fcnet_hiddens": [
+              64,
+              64,
+              64
+            ],
+            "free_log_std": false,
+            "no_final_linear": false,
+            "vf_share_layers": true,
+            "use_lstm": false,
+            "max_seq_len": 20,
+            "lstm_cell_size": 256,
+            "lstm_use_prev_action_reward": false,
+            "state_shape": null,
+            "framestack": true,
+            "dim": 84,
+            "grayscale": false,
+            "zero_mean": true,
+            "custom_preprocessor": null,
+            "custom_model": null,
+            "custom_action_dist": null,
+            "custom_options": {}
+          },
+          "optimizer": {},
+          "gamma": 0.999,
+          "horizon": 15,
+          "soft_horizon": false,
+          "no_done_at_end": false,
+          "env_config": {
+            "flow_params": "{\n    \"env\": {\n        \"additional_params\": {\n            \"detection_interval\": [\n                0,\n                15,\n                0\n            ],\n            \"num_advanced\": 1,\n            \"num_incoming_edges_per_node\": 4,\n            \"num_measures\": 2,\n            \"num_stopbars\": 3,\n            \"observed_nodes\": [\n                3386,\n                3371,\n                3362,\n                3373\n            ],\n            \"replication_list\": [\n                \"Replication 8050297\",\n                \"Replication 8050315\",\n                \"Replication 8050322\"\n            ],\n            \"statistical_interval\": [\n                0,\n                15,\n                0\n            ],\n            \"target_nodes\": [\n                3369,\n                3341,\n                3370,\n                3344,\n                3329\n            ]\n        },\n        \"clip_actions\": true,\n        \"evaluate\": false,\n        \"horizon\": 16874,\n        \"sims_per_step\": 1125,\n        \"warmup_steps\": 1\n    },\n    \"env_name\": \"coordinated_lights.CoordinatedEnv\",\n    \"exp_tag\": \"coordinated_traffic_lights\",\n    \"initial\": {\n        \"additional_params\": {},\n        \"bunching\": 0,\n        \"edges_distribution\": \"all\",\n        \"lanes_distribution\": Infinity,\n        \"min_gap\": 0,\n        \"perturbation\": 0.0,\n        \"shuffle\": false,\n        \"spacing\": \"uniform\",\n        \"x0\": 0\n    },\n    \"net\": {\n        \"additional_params\": {},\n        \"inflows\": {\n            \"_InFlows__flows\": []\n        },\n        \"osm_path\": null,\n        \"template\": \"/home/damian/flow/examples/aimsun/traffic_light_coordination/scenario_one_hour.ang\"\n    },\n    \"network\": \"coordinated_lights.CoordinatedNetwork\",\n    \"sim\": {\n        \"centroid_config_name\": \"Centroid Configuration 8040652\",\n        \"color_vehicles\": true,\n        \"emission_path\": null,\n        \"experiment_name\": \"Micro SRC Experiment 867\",\n        \"network_name\": \"Dynamic Scenario 866\",\n        \"pxpm\": 2,\n        \"render\": false,\n        \"replication_name\": \"Replication 8050297\",\n        \"restart_instance\": false,\n        \"save_render\": false,\n        \"show_radius\": false,\n        \"sight_radius\": 25,\n        \"sim_step\": 0.8,\n        \"subnetwork_name\": null\n    },\n    \"simulator\": \"aimsun\",\n    \"veh\": []\n}",
+            "run": "PPO"
+          },
+          "env": "CoordinatedEnv-v0",
+          "clip_rewards": null,
+          "clip_actions": false,
+          "preprocessor_pref": "deepmind",
+          "lr": 0.0003,
+          "monitor": false,
+          "log_level": "WARN",
+          "callbacks": {
+            "on_episode_start": null,
+            "on_episode_step": null,
+            "on_episode_end": null,
+            "on_sample_end": null,
+            "on_train_result": null,
+            "on_postprocess_traj": null
+          },
+          "ignore_worker_failures": false,
+          "log_sys_usage": true,
+          "eager": false,
+          "eager_tracing": false,
+          "no_eager_on_workers": false,
+          "evaluation_interval": null,
+          "evaluation_num_episodes": 10,
+          "evaluation_config": {},
+          "sample_async": false,
+          "observation_filter": "NoFilter",
+          "synchronize_filters": true,
+          "tf_session_args": {
+            "intra_op_parallelism_threads": 2,
+            "inter_op_parallelism_threads": 2,
+            "gpu_options": {
+              "allow_growth": true
+            },
+            "log_device_placement": false,
+            "device_count": {
+              "CPU": 1
+            },
+            "allow_soft_placement": true
+          },
+          "local_tf_session_args": {
+            "intra_op_parallelism_threads": 8,
+            "inter_op_parallelism_threads": 8
+          },
+          "compress_observations": false,
+          "collect_metrics_timeout": 180,
+          "metrics_smoothing_episodes": 100,
+          "remote_worker_envs": false,
+          "remote_env_batch_wait_ms": 0,
+          "min_iter_time_s": 0,
+          "timesteps_per_iteration": 0,
+          "seed": null,
+          "num_cpus_per_worker": 1,
+          "num_gpus_per_worker": 0,
+          "custom_resources_per_worker": {},
+          "num_cpus_for_driver": 1,
+          "memory": 0,
+          "object_store_memory": 0,
+          "memory_per_worker": 0,
+          "object_store_memory_per_worker": 0,
+          "input": "sampler",
+          "input_evaluation": [
+            "is",
+            "wis"
+          ],
+          "postprocess_inputs": false,
+          "shuffle_buffer_size": 0,
+          "output": null,
+          "output_compress_columns": [
+            "obs",
+            "new_obs"
+          ],
+          "output_max_file_size": 67108864,
+          "multiagent": {
+            "policies": {},
+            "policy_mapping_fn": null,
+            "policies_to_train": null
+          },
+          "use_gae": true,
+          "lambda": 0.97,
+          "kl_coeff": 0.2,
+          "sgd_minibatch_size": 45,
+          "shuffle_sequences": true,
+          "num_sgd_iter": 10,
+          "lr_schedule": null,
+          "vf_share_layers": false,
+          "vf_loss_coeff": 1.0,
+          "entropy_coeff": 0.0,
+          "entropy_coeff_schedule": null,
+          "clip_param": 0.3,
+          "vf_clip_param": 10.0,
+          "grad_clip": null,
+          "kl_target": 0.02,
+          "simple_optimizer": false
+        },
+        "time_since_restore": 21645.0721719265,
+        "timesteps_since_restore": 16000,
+        "iterations_since_restore": 10,
+        "perf": {
+          "cpu_util_percent": 84.40160345359236,
+          "ram_util_percent": 71.61504779525131
+        },
+        "num_healthy_workers": 8,
+        "trial_id": "8e8aee76",
+        "experiment_tag": "0"
+      },
+      "last_update_time": 1618170462.4071481,
+      "checkpoint_freq": 1,
+      "checkpoint_at_end": true,
+      "metric_analysis": {
+        "episode_reward_max": {
+          "max": -787.7513037820707,
+          "min": -879.4009178721841,
+          "last": -860.9495730352379
+        },
+        "episode_reward_min": {
+          "max": -2329.9888404421017,
+          "min": -35208.75456666959,
+          "last": -6172.563464038406
+        },
+        "episode_reward_mean": {
+          "max": -1331.9317094793585,
+          "min": -1722.8958518676527,
+          "last": -1546.0908165372323
+        },
+        "episode_len_mean": {
+          "max": 15.0,
+          "min": 15.0,
+          "last": 15.0
+        },
+        "episodes_this_iter": {
+          "max": 112,
+          "min": 104,
+          "last": 104
+        },
+        "timesteps_this_iter": {
+          "max": 1600,
+          "min": 1600,
+          "last": 1600
+        },
+        "done": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "timesteps_total": {
+          "max": 30400,
+          "min": 1600,
+          "last": 30400
+        },
+        "episodes_total": {
+          "max": 2024,
+          "min": 104,
+          "last": 2024
+        },
+        "training_iteration": {
+          "max": 19,
+          "min": 1,
+          "last": 19
+        },
+        "timestamp": {
+          "max": 1618170462,
+          "min": 1618129384,
+          "last": 1618170462
+        },
+        "time_this_iter_s": {
+          "max": 2304.2152099609375,
+          "min": 1897.3755266666412,
+          "last": 2274.3037548065186
+        },
+        "time_total_s": {
+          "max": 40939.23446774483,
+          "min": 1907.5378980636597,
+          "last": 40939.23446774483
+        },
+        "pid": {
+          "max": 1927838,
+          "min": 1803243,
+          "last": 1927838
+        },
+        "time_since_restore": {
+          "max": 21645.0721719265,
+          "min": 1897.3755266666412,
+          "last": 21645.0721719265
+        },
+        "timesteps_since_restore": {
+          "max": 16000,
+          "min": 1600,
+          "last": 16000
+        },
+        "iterations_since_restore": {
+          "max": 10,
+          "min": 1,
+          "last": 10
+        },
+        "num_healthy_workers": {
+          "max": 8,
+          "min": 8,
+          "last": 8
+        },
+        "sampler_perf/mean_env_wait_ms": {
+          "max": 9425.583073134901,
+          "min": 8058.001341363091,
+          "last": 9425.583073134901
+        },
+        "sampler_perf/mean_processing_ms": {
+          "max": 1153.4825734864467,
+          "min": 984.4797754762185,
+          "last": 1147.081404864818
+        },
+        "sampler_perf/mean_inference_ms": {
+          "max": 2.84745622037062,
+          "min": 2.27657220285512,
+          "last": 2.2905695325192785
+        },
+        "info/num_steps_trained": {
+          "max": 29925,
+          "min": 1575,
+          "last": 29925
+        },
+        "info/num_steps_sampled": {
+          "max": 30400,
+          "min": 1600,
+          "last": 30400
+        },
+        "info/sample_time_ms": {
+          "max": 2162404.624,
+          "min": 1891122.842,
+          "last": 2162404.624
+        },
+        "info/load_time_ms": {
+          "max": 293.618,
+          "min": 39.577,
+          "last": 39.577
+        },
+        "info/grad_time_ms": {
+          "max": 2623.084,
+          "min": 1647.695,
+          "last": 1700.587
+        },
+        "info/update_time_ms": {
+          "max": 3087.107,
+          "min": 319.301,
+          "last": 319.301
+        },
+        "config/num_workers": {
+          "max": 8,
+          "min": 8,
+          "last": 8
+        },
+        "config/num_envs_per_worker": {
+          "max": 1,
+          "min": 1,
+          "last": 1
+        },
+        "config/sample_batch_size": {
+          "max": 200,
+          "min": 200,
+          "last": 200
+        },
+        "config/num_gpus": {
+          "max": 0,
+          "min": 0,
+          "last": 0
+        },
+        "config/train_batch_size": {
+          "max": 45,
+          "min": 45,
+          "last": 45
+        },
+        "config/gamma": {
+          "max": 0.999,
+          "min": 0.999,
+          "last": 0.999
+        },
+        "config/horizon": {
+          "max": 15,
+          "min": 15,
+          "last": 15
+        },
+        "config/soft_horizon": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/no_done_at_end": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/clip_actions": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/lr": {
+          "max": 0.0003,
+          "min": 0.0003,
+          "last": 0.0003
+        },
+        "config/monitor": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/ignore_worker_failures": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/log_sys_usage": {
+          "max": true,
+          "min": true,
+          "last": true
+        },
+        "config/eager": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/eager_tracing": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/no_eager_on_workers": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/evaluation_num_episodes": {
+          "max": 10,
+          "min": 10,
+          "last": 10
+        },
+        "config/sample_async": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/synchronize_filters": {
+          "max": true,
+          "min": true,
+          "last": true
+        },
+        "config/compress_observations": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/collect_metrics_timeout": {
+          "max": 180,
+          "min": 180,
+          "last": 180
+        },
+        "config/metrics_smoothing_episodes": {
+          "max": 100,
+          "min": 100,
+          "last": 100
+        },
+        "config/remote_worker_envs": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/remote_env_batch_wait_ms": {
+          "max": 0,
+          "min": 0,
+          "last": 0
+        },
+        "config/min_iter_time_s": {
+          "max": 0,
+          "min": 0,
+          "last": 0
+        },
+        "config/timesteps_per_iteration": {
+          "max": 0,
+          "min": 0,
+          "last": 0
+        },
+        "config/num_cpus_per_worker": {
+          "max": 1,
+          "min": 1,
+          "last": 1
+        },
+        "config/num_gpus_per_worker": {
+          "max": 0,
+          "min": 0,
+          "last": 0
+        },
+        "config/num_cpus_for_driver": {
+          "max": 1,
+          "min": 1,
+          "last": 1
+        },
+        "config/memory": {
+          "max": 0,
+          "min": 0,
+          "last": 0
+        },
+        "config/object_store_memory": {
+          "max": 0,
+          "min": 0,
+          "last": 0
+        },
+        "config/memory_per_worker": {
+          "max": 0,
+          "min": 0,
+          "last": 0
+        },
+        "config/object_store_memory_per_worker": {
+          "max": 0,
+          "min": 0,
+          "last": 0
+        },
+        "config/postprocess_inputs": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/shuffle_buffer_size": {
+          "max": 0,
+          "min": 0,
+          "last": 0
+        },
+        "config/output_max_file_size": {
+          "max": 67108864,
+          "min": 67108864,
+          "last": 67108864
+        },
+        "config/use_gae": {
+          "max": true,
+          "min": true,
+          "last": true
+        },
+        "config/lambda": {
+          "max": 0.97,
+          "min": 0.97,
+          "last": 0.97
+        },
+        "config/kl_coeff": {
+          "max": 0.2,
+          "min": 0.2,
+          "last": 0.2
+        },
+        "config/sgd_minibatch_size": {
+          "max": 45,
+          "min": 45,
+          "last": 45
+        },
+        "config/shuffle_sequences": {
+          "max": true,
+          "min": true,
+          "last": true
+        },
+        "config/num_sgd_iter": {
+          "max": 10,
+          "min": 10,
+          "last": 10
+        },
+        "config/vf_share_layers": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/vf_loss_coeff": {
+          "max": 1.0,
+          "min": 1.0,
+          "last": 1.0
+        },
+        "config/entropy_coeff": {
+          "max": 0.0,
+          "min": 0.0,
+          "last": 0.0
+        },
+        "config/clip_param": {
+          "max": 0.3,
+          "min": 0.3,
+          "last": 0.3
+        },
+        "config/vf_clip_param": {
+          "max": 10.0,
+          "min": 10.0,
+          "last": 10.0
+        },
+        "config/kl_target": {
+          "max": 0.02,
+          "min": 0.02,
+          "last": 0.02
+        },
+        "config/simple_optimizer": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "perf/cpu_util_percent": {
+          "max": 84.6977399380805,
+          "min": 81.65795663359059,
+          "last": 84.40160345359236
+        },
+        "perf/ram_util_percent": {
+          "max": 71.61504779525131,
+          "min": 44.945437753971184,
+          "last": 71.61504779525131
+        },
+        "config/model/free_log_std": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/model/no_final_linear": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/model/vf_share_layers": {
+          "max": true,
+          "min": true,
+          "last": true
+        },
+        "config/model/use_lstm": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/model/max_seq_len": {
+          "max": 20,
+          "min": 20,
+          "last": 20
+        },
+        "config/model/lstm_cell_size": {
+          "max": 256,
+          "min": 256,
+          "last": 256
+        },
+        "config/model/lstm_use_prev_action_reward": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/model/framestack": {
+          "max": true,
+          "min": true,
+          "last": true
+        },
+        "config/model/dim": {
+          "max": 84,
+          "min": 84,
+          "last": 84
+        },
+        "config/model/grayscale": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/model/zero_mean": {
+          "max": true,
+          "min": true,
+          "last": true
+        },
+        "config/tf_session_args/intra_op_parallelism_threads": {
+          "max": 2,
+          "min": 2,
+          "last": 2
+        },
+        "config/tf_session_args/inter_op_parallelism_threads": {
+          "max": 2,
+          "min": 2,
+          "last": 2
+        },
+        "config/tf_session_args/log_device_placement": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/tf_session_args/allow_soft_placement": {
+          "max": true,
+          "min": true,
+          "last": true
+        },
+        "config/local_tf_session_args/intra_op_parallelism_threads": {
+          "max": 8,
+          "min": 8,
+          "last": 8
+        },
+        "config/local_tf_session_args/inter_op_parallelism_threads": {
+          "max": 8,
+          "min": 8,
+          "last": 8
+        },
+        "info/learner/default_policy/cur_kl_coeff": {
+          "max": 1.0125000476837158,
+          "min": 0.20000000298023224,
+          "last": 1.0125000476837158
+        },
+        "info/learner/default_policy/cur_lr": {
+          "max": 0.0003000000142492354,
+          "min": 0.0003000000142492354,
+          "last": 0.0003000000142492354
+        },
+        "info/learner/default_policy/total_loss": {
+          "max": {
+            "_type": "CLOUDPICKLE_FALLBACK",
+            "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b0074946243045b0bb84a94869452942e"
+          },
+          "min": {
+            "_type": "CLOUDPICKLE_FALLBACK",
+            "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b007494624304eac2164994869452942e"
+          },
+          "last": {
+            "_type": "CLOUDPICKLE_FALLBACK",
+            "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b007494624304b7b4694994869452942e"
+          }
+        },
+        "info/learner/default_policy/policy_loss": {
+          "max": {
+            "_type": "CLOUDPICKLE_FALLBACK",
+            "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b007494624304e5278dbd94869452942e"
+          },
+          "min": {
+            "_type": "CLOUDPICKLE_FALLBACK",
+            "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b007494624304c03c62be94869452942e"
+          },
+          "last": {
+            "_type": "CLOUDPICKLE_FALLBACK",
+            "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b0074946243049a2150be94869452942e"
+          }
+        },
+        "info/learner/default_policy/vf_loss": {
+          "max": {
+            "_type": "CLOUDPICKLE_FALLBACK",
+            "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b0074946243045c0bb84a94869452942e"
+          },
+          "min": {
+            "_type": "CLOUDPICKLE_FALLBACK",
+            "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b007494624304ecc2164994869452942e"
+          },
+          "last": {
+            "_type": "CLOUDPICKLE_FALLBACK",
+            "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b007494624304bbb4694994869452942e"
+          }
+        },
+        "info/learner/default_policy/vf_explained_var": {
+          "max": {
+            "_type": "CLOUDPICKLE_FALLBACK",
+            "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b0074946243042549923294869452942e"
+          },
+          "min": {
+            "_type": "CLOUDPICKLE_FALLBACK",
+            "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b0074946243040fea68b694869452942e"
+          },
+          "last": {
+            "_type": "CLOUDPICKLE_FALLBACK",
+            "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b007494624304a10eea3194869452942e"
+          }
+        },
+        "info/learner/default_policy/kl": {
+          "max": {
+            "_type": "CLOUDPICKLE_FALLBACK",
+            "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b007494624304e27c633d94869452942e"
+          },
+          "min": {
+            "_type": "CLOUDPICKLE_FALLBACK",
+            "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b0074946243042ed57b3c94869452942e"
+          },
+          "last": {
+            "_type": "CLOUDPICKLE_FALLBACK",
+            "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b0074946243042ca5093d94869452942e"
+          }
+        },
+        "info/learner/default_policy/entropy": {
+          "max": {
+            "_type": "CLOUDPICKLE_FALLBACK",
+            "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b007494624304bc0fbf4194869452942e"
+          },
+          "min": {
+            "_type": "CLOUDPICKLE_FALLBACK",
+            "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b0074946243044e2eba4194869452942e"
+          },
+          "last": {
+            "_type": "CLOUDPICKLE_FALLBACK",
+            "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b0074946243044e2eba4194869452942e"
+          }
+        },
+        "info/learner/default_policy/entropy_coeff": {
+          "max": 0.0,
+          "min": 0.0,
+          "last": 0.0
+        },
+        "config/tf_session_args/gpu_options/allow_growth": {
+          "max": true,
+          "min": true,
+          "last": true
+        },
+        "config/tf_session_args/device_count/CPU": {
+          "max": 1,
+          "min": 1,
+          "last": 1
+        }
+      },
+      "sync_on_checkpoint": true,
+      "checkpoint_manager": {
+        "_type": "CLOUDPICKLE_FALLBACK",
+        "value": "800495884a0000000000008c1b7261792e74756e652e636865636b706f696e745f6d616e61676572948c11436865636b706f696e744d616e616765729493942981947d94288c146b6565705f636865636b706f696e74735f6e756d944b038c165f636865636b706f696e745f73636f72655f6465736394898c165f636865636b706f696e745f73636f72655f61747472948c12747261696e696e675f697465726174696f6e948c116e65776573745f636865636b706f696e749468008c0a436865636b706f696e749493942981947d94288c0773746f72616765948c046469736b948c0576616c7565948c8a2f686f6d652f64616d69616e2f7261795f726573756c74732f636f6f7264696e617465645f747261666669635f6c69676874732f50504f5f436f6f7264696e61746564456e762d76305f38653861656537365f323032312d30342d31315f31352d35302d31375f723570777862612f636865636b706f696e745f31392f636865636b706f696e742d3139948c06726573756c74947d94288c12657069736f64655f7265776172645f6d61789447c08ae798b9bf5c158c12657069736f64655f7265776172645f6d696e9447c0b81c903f2de16d8c13657069736f64655f7265776172645f6d65616e948c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026638944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b00749462430865a502ff5c2898c094869452948c10657069736f64655f6c656e5f6d65616e946819681f43080000000000002e4094869452948c12657069736f6465735f746869735f69746572944b688c11706f6c6963795f7265776172645f6d696e947d948c11706f6c6963795f7265776172645f6d6178947d948c12706f6c6963795f7265776172645f6d65616e947d948c0e637573746f6d5f6d657472696373947d948c0c73616d706c65725f70657266947d94288c106d65616e5f656e765f776169745f6d73946819681f4308caf623a2ca68c24094869452948c126d65616e5f70726f63657373696e675f6d73946819681f43088400cc5b53ec914094869452948c116d65616e5f696e666572656e63655f6d73946819681f430811137b1e165302409486945294758c146f66665f706f6c6963795f657374696d61746f72947d948c04696e666f947d94288c116e756d5f73746570735f747261696e6564944de5748c116e756d5f73746570735f73616d706c6564944dc0768c0e73616d706c655f74696d655f6d73946819681f4308643bdf4f727f404194869452948c0c6c6f61645f74696d655f6d73946819681f430860e5d022dbc9434094869452948c0c677261645f74696d655f6d73946819681f4308022b871659929a4094869452948c0e7570646174655f74696d655f6d73946819681f4308894160e5d0f4734094869452948c076c6561726e6572947d948c0e64656661756c745f706f6c696379947d94288c0c6375725f6b6c5f636f656666946819681f4308000000403333f03f94869452948c066375725f6c72946819681f4308000000402aa9333f94869452948c0a746f74616c5f6c6f7373946819681c8c026634944b004b0187945294284b0368204e4e4e4affffffff4affffffff4b007494624304b7b4694994869452948c0b706f6c6963795f6c6f7373946819686543049a2150be94869452948c0776665f6c6f737394681968654304bbb4694994869452948c1076665f6578706c61696e65645f76617294681968654304a10eea3194869452948c026b6c946819686543042ca5093d94869452948c07656e74726f7079946819686543044e2eba4194869452948c0d656e74726f70795f636f656666946819681f4308000000000000000094869452947573758c1374696d6573746570735f746869735f69746572944d40068c04646f6e6594898c0f74696d6573746570735f746f74616c944dc0768c0e657069736f6465735f746f74616c944de8078c12747261696e696e675f697465726174696f6e944b138c0d6578706572696d656e745f6964948c206162363631323937326138613434616261303231616531663334393862313733948c0464617465948c13323032312d30342d31325f30332d34372d3432948c0974696d657374616d70944a5e5273608c1074696d655f746869735f697465725f73944740a1c49b85c000008c0c74696d655f746f74616c5f73944740e3fd6780c280008c03706964944a9e6a1d008c08686f73746e616d65948c0e63787465616d2d73616e64626f78948c076e6f64655f6970948c0f3139322e3136382e3132322e313639948c06636f6e666967947d94288c0b6e756d5f776f726b657273944b088c136e756d5f656e76735f7065725f776f726b6572944b018c1173616d706c655f62617463685f73697a65944bc88c0a62617463685f6d6f6465948c117472756e636174655f657069736f646573948c086e756d5f67707573944b008c10747261696e5f62617463685f73697a65944b2d8c056d6f64656c947d94288c0c636f6e765f66696c74657273944e8c0f636f6e765f61637469766174696f6e948c0472656c75948c1066636e65745f61637469766174696f6e948c0474616e68948c0d66636e65745f68696464656e73945d94284b404b404b40658c0c667265655f6c6f675f73746494898c0f6e6f5f66696e616c5f6c696e65617294898c0f76665f73686172655f6c617965727394888c087573655f6c73746d94898c0b6d61785f7365715f6c656e944b148c0e6c73746d5f63656c6c5f73697a65944d00018c1b6c73746d5f7573655f707265765f616374696f6e5f72657761726494898c0b73746174655f7368617065944e8c0a6672616d65737461636b94888c0364696d944b548c09677261797363616c6594898c097a65726f5f6d65616e94888c13637573746f6d5f70726570726f636573736f72944e8c0c637573746f6d5f6d6f64656c944e8c12637573746f6d5f616374696f6e5f64697374944e8c0e637573746f6d5f6f7074696f6e73947d94758c096f7074696d697a6572947d948c0567616d6d6194473feff7ced916872b8c07686f72697a6f6e944b0f8c0c736f66745f686f72697a6f6e94898c0e6e6f5f646f6e655f61745f656e6494898c0a656e765f636f6e666967947d94288c0b666c6f775f706172616d739458da0800007b0a2020202022656e76223a207b0a2020202020202020226164646974696f6e616c5f706172616d73223a207b0a20202020202020202020202022646574656374696f6e5f696e74657276616c223a205b0a20202020202020202020202020202020302c0a2020202020202020202020202020202031352c0a20202020202020202020202020202020300a2020202020202020202020205d2c0a202020202020202020202020226e756d5f616476616e636564223a20312c0a202020202020202020202020226e756d5f696e636f6d696e675f65646765735f7065725f6e6f6465223a20342c0a202020202020202020202020226e756d5f6d65617375726573223a20322c0a202020202020202020202020226e756d5f73746f7062617273223a20332c0a202020202020202020202020226f627365727665645f6e6f646573223a205b0a20202020202020202020202020202020333338362c0a20202020202020202020202020202020333337312c0a20202020202020202020202020202020333336322c0a20202020202020202020202020202020333337330a2020202020202020202020205d2c0a202020202020202020202020227265706c69636174696f6e5f6c697374223a205b0a20202020202020202020202020202020225265706c69636174696f6e2038303530323937222c0a20202020202020202020202020202020225265706c69636174696f6e2038303530333135222c0a20202020202020202020202020202020225265706c69636174696f6e2038303530333232220a2020202020202020202020205d2c0a20202020202020202020202022737461746973746963616c5f696e74657276616c223a205b0a20202020202020202020202020202020302c0a2020202020202020202020202020202031352c0a20202020202020202020202020202020300a2020202020202020202020205d2c0a202020202020202020202020227461726765745f6e6f646573223a205b0a20202020202020202020202020202020333336392c0a20202020202020202020202020202020333334312c0a20202020202020202020202020202020333337302c0a20202020202020202020202020202020333334342c0a20202020202020202020202020202020333332390a2020202020202020202020205d0a20202020202020207d2c0a202020202020202022636c69705f616374696f6e73223a20747275652c0a2020202020202020226576616c75617465223a2066616c73652c0a202020202020202022686f72697a6f6e223a2031363837342c0a20202020202020202273696d735f7065725f73746570223a20313132352c0a2020202020202020227761726d75705f7374657073223a20310a202020207d2c0a2020202022656e765f6e616d65223a2022636f6f7264696e617465645f6c69676874732e436f6f7264696e61746564456e76222c0a20202020226578705f746167223a2022636f6f7264696e617465645f747261666669635f6c6967687473222c0a2020202022696e697469616c223a207b0a2020202020202020226164646974696f6e616c5f706172616d73223a207b7d2c0a20202020202020202262756e6368696e67223a20302c0a20202020202020202265646765735f646973747269627574696f6e223a2022616c6c222c0a2020202020202020226c616e65735f646973747269627574696f6e223a20496e66696e6974792c0a2020202020202020226d696e5f676170223a20302c0a202020202020202022706572747572626174696f6e223a20302e302c0a20202020202020202273687566666c65223a2066616c73652c0a20202020202020202273706163696e67223a2022756e69666f726d222c0a2020202020202020227830223a20300a202020207d2c0a20202020226e6574223a207b0a2020202020202020226164646974696f6e616c5f706172616d73223a207b7d2c0a202020202020202022696e666c6f7773223a207b0a202020202020202020202020225f496e466c6f77735f5f666c6f7773223a205b5d0a20202020202020207d2c0a2020202020202020226f736d5f70617468223a206e756c6c2c0a20202020202020202274656d706c617465223a20222f686f6d652f64616d69616e2f666c6f772f6578616d706c65732f61696d73756e2f747261666669635f6c696768745f636f6f7264696e6174696f6e2f7363656e6172696f5f6f6e655f686f75722e616e67220a202020207d2c0a20202020226e6574776f726b223a2022636f6f7264696e617465645f6c69676874732e436f6f7264696e617465644e6574776f726b222c0a202020202273696d223a207b0a20202020202020202263656e74726f69645f636f6e6669675f6e616d65223a202243656e74726f696420436f6e66696775726174696f6e2038303430363532222c0a202020202020202022636f6c6f725f76656869636c6573223a20747275652c0a202020202020202022656d697373696f6e5f70617468223a206e756c6c2c0a2020202020202020226578706572696d656e745f6e616d65223a20224d6963726f20535243204578706572696d656e7420383637222c0a2020202020202020226e6574776f726b5f6e616d65223a202244796e616d6963205363656e6172696f20383636222c0a2020202020202020227078706d223a20322c0a20202020202020202272656e646572223a2066616c73652c0a2020202020202020227265706c69636174696f6e5f6e616d65223a20225265706c69636174696f6e2038303530323937222c0a202020202020202022726573746172745f696e7374616e6365223a2066616c73652c0a202020202020202022736176655f72656e646572223a2066616c73652c0a20202020202020202273686f775f726164697573223a2066616c73652c0a20202020202020202273696768745f726164697573223a2032352c0a20202020202020202273696d5f73746570223a20302e382c0a2020202020202020227375626e6574776f726b5f6e616d65223a206e756c6c0a202020207d2c0a202020202273696d756c61746f72223a202261696d73756e222c0a2020202022766568223a205b5d0a7d948c0372756e948c0350504f94758c03656e76948c11436f6f7264696e61746564456e762d7630948c0c636c69705f72657761726473944e8c0c636c69705f616374696f6e7394898c1170726570726f636573736f725f70726566948c08646565706d696e64948c026c7294473f33a92a305532618c076d6f6e69746f7294898c096c6f675f6c6576656c948c045741524e948c0963616c6c6261636b73947d94288c106f6e5f657069736f64655f7374617274944e8c0f6f6e5f657069736f64655f73746570944e8c0e6f6e5f657069736f64655f656e64944e8c0d6f6e5f73616d706c655f656e64944e8c0f6f6e5f747261696e5f726573756c74944e8c136f6e5f706f737470726f636573735f7472616a944e758c1669676e6f72655f776f726b65725f6661696c7572657394898c0d6c6f675f7379735f757361676594888c05656167657294898c0d65616765725f74726163696e6794898c136e6f5f65616765725f6f6e5f776f726b65727394898c136576616c756174696f6e5f696e74657276616c944e8c176576616c756174696f6e5f6e756d5f657069736f646573944b0a8c116576616c756174696f6e5f636f6e666967947d948c0c73616d706c655f6173796e6394898c126f62736572766174696f6e5f66696c746572948c084e6f46696c746572948c1373796e6368726f6e697a655f66696c7465727394888c0f74665f73657373696f6e5f61726773947d94288c1c696e7472615f6f705f706172616c6c656c69736d5f74687265616473944b028c1c696e7465725f6f705f706172616c6c656c69736d5f74687265616473944b028c0b6770755f6f7074696f6e73947d948c0c616c6c6f775f67726f7774689488738c146c6f675f6465766963655f706c6163656d656e7494898c0c6465766963655f636f756e74947d948c03435055944b01738c14616c6c6f775f736f66745f706c6163656d656e749488758c156c6f63616c5f74665f73657373696f6e5f61726773947d942868e34b0868e44b08758c15636f6d70726573735f6f62736572766174696f6e7394898c17636f6c6c6563745f6d6574726963735f74696d656f7574944bb48c1a6d6574726963735f736d6f6f7468696e675f657069736f646573944b648c1272656d6f74655f776f726b65725f656e767394898c1872656d6f74655f656e765f62617463685f776169745f6d73944b008c0f6d696e5f697465725f74696d655f73944b008c1774696d6573746570735f7065725f697465726174696f6e944b008c0473656564944e8c136e756d5f637075735f7065725f776f726b6572944b018c136e756d5f677075735f7065725f776f726b6572944b008c1b637573746f6d5f7265736f75726365735f7065725f776f726b6572947d948c136e756d5f637075735f666f725f647269766572944b018c066d656d6f7279944b008c136f626a6563745f73746f72655f6d656d6f7279944b008c116d656d6f72795f7065725f776f726b6572944b008c1e6f626a6563745f73746f72655f6d656d6f72795f7065725f776f726b6572944b008c05696e707574948c0773616d706c6572948c10696e7075745f6576616c756174696f6e945d94288c026973948c0377697394658c12706f737470726f636573735f696e7075747394898c1373687566666c655f6275666665725f73697a65944b008c066f7574707574944e8c176f75747075745f636f6d70726573735f636f6c756d6e73945d94288c036f6273948c076e65775f6f627394658c146f75747075745f6d61785f66696c655f73697a65944a000000048c0a6d756c74696167656e74947d94288c08706f6c6963696573947d948c11706f6c6963795f6d617070696e675f666e944e8c11706f6c69636965735f746f5f747261696e944e758c077573655f67616594888c066c616d62646194473fef0a3d70a3d70a8c086b6c5f636f65666694473fc999999999999a8c127367645f6d696e6962617463685f73697a65944b2d8c1173687566666c655f73657175656e63657394888c0c6e756d5f7367645f69746572944b0a8c0b6c725f7363686564756c65944e68a7898c0d76665f6c6f73735f636f65666694473ff00000000000008c0d656e74726f70795f636f656666944700000000000000008c16656e74726f70795f636f6566665f7363686564756c65944e8c0a636c69705f706172616d94473fd33333333333338c0d76665f636c69705f706172616d944740240000000000008c09677261645f636c6970944e8c096b6c5f74617267657494473f947ae147ae147b8c1073696d706c655f6f7074696d697a65729489758c1274696d655f73696e63655f726573746f7265944740d523449e7700008c1774696d6573746570735f73696e63655f726573746f7265944d803e8c18697465726174696f6e735f73696e63655f726573746f7265944b0a8c0470657266947d94288c106370755f7574696c5f70657263656e74946819681f4308f3c8f8deb319554094869452948c1072616d5f7574696c5f70657263656e74946819681f430834856df15ce751409486945294758c136e756d5f6865616c7468795f776f726b657273944b088c08747269616c5f6964948c083865386165653736948c0e6578706572696d656e745f746167948c0130947575628c115f626573745f636865636b706f696e7473945d942868008c0951756575654974656d9493942981947d94288c087072696f72697479944b116810680b2981947d9428680e680f68108c8a2f686f6d652f64616d69616e2f7261795f726573756c74732f636f6f7264696e617465645f747261666669635f6c69676874732f50504f5f436f6f7264696e61746564456e762d76305f38653861656537365f323032312d30342d31315f31352d35302d31375f723570777862612f636865636b706f696e745f31372f636865636b706f696e742d31379468127d94288c12657069736f64655f7265776172645f6d61789447c08aff053cf974fe8c12657069736f64655f7265776172645f6d696e9447c0d4aebffcb373768c13657069736f64655f7265776172645f6d65616e946819681f4308e07aa9e74ef398c094869452948c10657069736f64655f6c656e5f6d65616e946819681f43080000000000002e4094869452948c12657069736f6465735f746869735f69746572944b688c11706f6c6963795f7265776172645f6d696e947d948c11706f6c6963795f7265776172645f6d6178947d948c12706f6c6963795f7265776172645f6d65616e947d948c0e637573746f6d5f6d657472696373947d948c0c73616d706c65725f70657266947d94288c106d65616e5f656e765f776169745f6d73946819681f430847010e5da223c24094869452948c126d65616e5f70726f63657373696e675f6d73946819681f4308b1e7a71f4ed5914094869452948c116d65616e5f696e666572656e63655f6d73946819681f4308cb4ba670006e02409486945294758c146f66665f706f6c6963795f657374696d61746f72947d948c04696e666f947d94288c116e756d5f73746570735f747261696e6564944d97688c116e756d5f73746570735f73616d706c6564944d406a8c0e73616d706c655f74696d655f6d73946819681f4308c520b032fc4b404194869452948c0c6c6f61645f74696d655f6d73946819681f4308cff753e3a54b474094869452948c0c677261645f74696d655f6d73946819681f43081904560ead419b4094869452948c0e7570646174655f74696d655f6d73946819681f43085eba490c02bf784094869452948c076c6561726e6572947d948c0e64656661756c745f706f6c696379947d94288c0c6375725f6b6c5f636f656666946819681f4308000000a09999e53f94869452948c066375725f6c72946819681f4308000000402aa9333f94869452948c0a746f74616c5f6c6f7373946819686543040f21ec4994869452948c0b706f6c6963795f6c6f737394681968654304269de4bd94869452948c0776665f6c6f7373946819686543040f21ec4994869452948c1076665f6578706c61696e65645f766172946819686543042549923294869452948c026b6c94681968654304c426c43c94869452948c07656e74726f707994681968654304d2afba4194869452948c0d656e74726f70795f636f656666946819681f4308000000000000000094869452947573758c1374696d6573746570735f746869735f69746572944d40068c04646f6e6594898c0f74696d6573746570735f746f74616c944d406a8c0e657069736f6465735f746f74616c944d10078c12747261696e696e675f697465726174696f6e944b118c0d6578706572696d656e745f6964948c206162363631323937326138613434616261303231616531663334393862313733948c0464617465948c13323032312d30342d31325f30322d33322d3033948c0974696d657374616d70944aa34073608c1074696d655f746869735f697465725f73944740a187fbd82000008c0c74696d655f746f74616c5f73944740e1c610226400008c03706964944a9e6a1d008c08686f73746e616d65948c0e63787465616d2d73616e64626f78948c076e6f64655f6970948c0f3139322e3136382e3132322e313639948c06636f6e666967947d94288c0b6e756d5f776f726b657273944b088c136e756d5f656e76735f7065725f776f726b6572944b018c1173616d706c655f62617463685f73697a65944bc88c0a62617463685f6d6f6465948c117472756e636174655f657069736f646573948c086e756d5f67707573944b008c10747261696e5f62617463685f73697a65944b2d8c056d6f64656c947d94288c0c636f6e765f66696c74657273944e8c0f636f6e765f61637469766174696f6e948c0472656c75948c1066636e65745f61637469766174696f6e948c0474616e68948c0d66636e65745f68696464656e73945d94284b404b404b40658c0c667265655f6c6f675f73746494898c0f6e6f5f66696e616c5f6c696e65617294898c0f76665f73686172655f6c617965727394888c087573655f6c73746d94898c0b6d61785f7365715f6c656e944b148c0e6c73746d5f63656c6c5f73697a65944d00018c1b6c73746d5f7573655f707265765f616374696f6e5f72657761726494898c0b73746174655f7368617065944e8c0a6672616d65737461636b94888c0364696d944b548c09677261797363616c6594898c097a65726f5f6d65616e94888c13637573746f6d5f70726570726f636573736f72944e8c0c637573746f6d5f6d6f64656c944e8c12637573746f6d5f616374696f6e5f64697374944e8c0e637573746f6d5f6f7074696f6e73947d94758c096f7074696d697a6572947d948c0567616d6d6194473feff7ced916872b8c07686f72697a6f6e944b0f8c0c736f66745f686f72697a6f6e94898c0e6e6f5f646f6e655f61745f656e6494898c0a656e765f636f6e666967947d94288c0b666c6f775f706172616d739458da0800007b0a2020202022656e76223a207b0a2020202020202020226164646974696f6e616c5f706172616d73223a207b0a20202020202020202020202022646574656374696f6e5f696e74657276616c223a205b0a20202020202020202020202020202020302c0a2020202020202020202020202020202031352c0a20202020202020202020202020202020300a2020202020202020202020205d2c0a202020202020202020202020226e756d5f616476616e636564223a20312c0a202020202020202020202020226e756d5f696e636f6d696e675f65646765735f7065725f6e6f6465223a20342c0a202020202020202020202020226e756d5f6d65617375726573223a20322c0a202020202020202020202020226e756d5f73746f7062617273223a20332c0a202020202020202020202020226f627365727665645f6e6f646573223a205b0a20202020202020202020202020202020333338362c0a20202020202020202020202020202020333337312c0a20202020202020202020202020202020333336322c0a20202020202020202020202020202020333337330a2020202020202020202020205d2c0a202020202020202020202020227265706c69636174696f6e5f6c697374223a205b0a20202020202020202020202020202020225265706c69636174696f6e2038303530323937222c0a20202020202020202020202020202020225265706c69636174696f6e2038303530333135222c0a20202020202020202020202020202020225265706c69636174696f6e2038303530333232220a2020202020202020202020205d2c0a20202020202020202020202022737461746973746963616c5f696e74657276616c223a205b0a20202020202020202020202020202020302c0a2020202020202020202020202020202031352c0a20202020202020202020202020202020300a2020202020202020202020205d2c0a202020202020202020202020227461726765745f6e6f646573223a205b0a20202020202020202020202020202020333336392c0a20202020202020202020202020202020333334312c0a20202020202020202020202020202020333337302c0a20202020202020202020202020202020333334342c0a20202020202020202020202020202020333332390a2020202020202020202020205d0a20202020202020207d2c0a202020202020202022636c69705f616374696f6e73223a20747275652c0a2020202020202020226576616c75617465223a2066616c73652c0a202020202020202022686f72697a6f6e223a2031363837342c0a20202020202020202273696d735f7065725f73746570223a20313132352c0a2020202020202020227761726d75705f7374657073223a20310a202020207d2c0a2020202022656e765f6e616d65223a2022636f6f7264696e617465645f6c69676874732e436f6f7264696e61746564456e76222c0a20202020226578705f746167223a2022636f6f7264696e617465645f747261666669635f6c6967687473222c0a2020202022696e697469616c223a207b0a2020202020202020226164646974696f6e616c5f706172616d73223a207b7d2c0a20202020202020202262756e6368696e67223a20302c0a20202020202020202265646765735f646973747269627574696f6e223a2022616c6c222c0a2020202020202020226c616e65735f646973747269627574696f6e223a20496e66696e6974792c0a2020202020202020226d696e5f676170223a20302c0a202020202020202022706572747572626174696f6e223a20302e302c0a20202020202020202273687566666c65223a2066616c73652c0a20202020202020202273706163696e67223a2022756e69666f726d222c0a2020202020202020227830223a20300a202020207d2c0a20202020226e6574223a207b0a2020202020202020226164646974696f6e616c5f706172616d73223a207b7d2c0a202020202020202022696e666c6f7773223a207b0a202020202020202020202020225f496e466c6f77735f5f666c6f7773223a205b5d0a20202020202020207d2c0a2020202020202020226f736d5f70617468223a206e756c6c2c0a20202020202020202274656d706c617465223a20222f686f6d652f64616d69616e2f666c6f772f6578616d706c65732f61696d73756e2f747261666669635f6c696768745f636f6f7264696e6174696f6e2f7363656e6172696f5f6f6e655f686f75722e616e67220a202020207d2c0a20202020226e6574776f726b223a2022636f6f7264696e617465645f6c69676874732e436f6f7264696e617465644e6574776f726b222c0a202020202273696d223a207b0a20202020202020202263656e74726f69645f636f6e6669675f6e616d65223a202243656e74726f696420436f6e66696775726174696f6e2038303430363532222c0a202020202020202022636f6c6f725f76656869636c6573223a20747275652c0a202020202020202022656d697373696f6e5f70617468223a206e756c6c2c0a2020202020202020226578706572696d656e745f6e616d65223a20224d6963726f20535243204578706572696d656e7420383637222c0a2020202020202020226e6574776f726b5f6e616d65223a202244796e616d6963205363656e6172696f20383636222c0a2020202020202020227078706d223a20322c0a20202020202020202272656e646572223a2066616c73652c0a2020202020202020227265706c69636174696f6e5f6e616d65223a20225265706c69636174696f6e2038303530323937222c0a202020202020202022726573746172745f696e7374616e6365223a2066616c73652c0a202020202020202022736176655f72656e646572223a2066616c73652c0a20202020202020202273686f775f726164697573223a2066616c73652c0a20202020202020202273696768745f726164697573223a2032352c0a20202020202020202273696d5f73746570223a20302e382c0a2020202020202020227375626e6574776f726b5f6e616d65223a206e756c6c0a202020207d2c0a202020202273696d756c61746f72223a202261696d73756e222c0a2020202022766568223a205b5d0a7d948c0372756e948c0350504f94758c03656e76948c11436f6f7264696e61746564456e762d7630948c0c636c69705f72657761726473944e8c0c636c69705f616374696f6e7394898c1170726570726f636573736f725f70726566948c08646565706d696e64948c026c7294473f33a92a305532618c076d6f6e69746f7294898c096c6f675f6c6576656c948c045741524e948c0963616c6c6261636b73947d94288c106f6e5f657069736f64655f7374617274944e8c0f6f6e5f657069736f64655f73746570944e8c0e6f6e5f657069736f64655f656e64944e8c0d6f6e5f73616d706c655f656e64944e8c0f6f6e5f747261696e5f726573756c74944e8c136f6e5f706f737470726f636573735f7472616a944e758c1669676e6f72655f776f726b65725f6661696c7572657394898c0d6c6f675f7379735f757361676594888c05656167657294898c0d65616765725f74726163696e6794898c136e6f5f65616765725f6f6e5f776f726b65727394898c136576616c756174696f6e5f696e74657276616c944e8c176576616c756174696f6e5f6e756d5f657069736f646573944b0a8c116576616c756174696f6e5f636f6e666967947d948c0c73616d706c655f6173796e6394898c126f62736572766174696f6e5f66696c746572948c084e6f46696c746572948c1373796e6368726f6e697a655f66696c7465727394888c0f74665f73657373696f6e5f61726773947d94288c1c696e7472615f6f705f706172616c6c656c69736d5f74687265616473944b028c1c696e7465725f6f705f706172616c6c656c69736d5f74687265616473944b028c0b6770755f6f7074696f6e73947d948c0c616c6c6f775f67726f7774689488738c146c6f675f6465766963655f706c6163656d656e7494898c0c6465766963655f636f756e74947d948c03435055944b01738c14616c6c6f775f736f66745f706c6163656d656e749488758c156c6f63616c5f74665f73657373696f6e5f61726773947d94286a000200004b086a010200004b08758c15636f6d70726573735f6f62736572766174696f6e7394898c17636f6c6c6563745f6d6574726963735f74696d656f7574944bb48c1a6d6574726963735f736d6f6f7468696e675f657069736f646573944b648c1272656d6f74655f776f726b65725f656e767394898c1872656d6f74655f656e765f62617463685f776169745f6d73944b008c0f6d696e5f697465725f74696d655f73944b008c1774696d6573746570735f7065725f697465726174696f6e944b008c0473656564944e8c136e756d5f637075735f7065725f776f726b6572944b018c136e756d5f677075735f7065725f776f726b6572944b008c1b637573746f6d5f7265736f75726365735f7065725f776f726b6572947d948c136e756d5f637075735f666f725f647269766572944b018c066d656d6f7279944b008c136f626a6563745f73746f72655f6d656d6f7279944b008c116d656d6f72795f7065725f776f726b6572944b008c1e6f626a6563745f73746f72655f6d656d6f72795f7065725f776f726b6572944b008c05696e707574948c0773616d706c6572948c10696e7075745f6576616c756174696f6e945d94288c026973948c0377697394658c12706f737470726f636573735f696e7075747394898c1373687566666c655f6275666665725f73697a65944b008c066f7574707574944e8c176f75747075745f636f6d70726573735f636f6c756d6e73945d94288c036f6273948c076e65775f6f627394658c146f75747075745f6d61785f66696c655f73697a65944a000000048c0a6d756c74696167656e74947d94288c08706f6c6963696573947d948c11706f6c6963795f6d617070696e675f666e944e8c11706f6c69636965735f746f5f747261696e944e758c077573655f67616594888c066c616d62646194473fef0a3d70a3d70a8c086b6c5f636f65666694473fc999999999999a8c127367645f6d696e6962617463685f73697a65944b2d8c1173687566666c655f73657175656e63657394888c0c6e756d5f7367645f69746572944b0a8c0b6c725f7363686564756c65944e6ac4010000898c0d76665f6c6f73735f636f65666694473ff00000000000008c0d656e74726f70795f636f656666944700000000000000008c16656e74726f70795f636f6566665f7363686564756c65944e8c0a636c69705f706172616d94473fd33333333333338c0d76665f636c69705f706172616d944740240000000000008c09677261645f636c6970944e8c096b6c5f74617267657494473f947ae147ae147b8c1073696d706c655f6f7074696d697a65729489758c1274696d655f73696e63655f726573746f7265944740d0b495e1ba00008c1774696d6573746570735f73696e63655f726573746f7265944d00328c18697465726174696f6e735f73696e63655f726573746f7265944b088c0470657266947d94288c106370755f7574696c5f70657263656e74946819681f4308a69bc42030f5544094869452948c1072616d5f7574696c5f70657263656e74946819681f4308cff753e3e59250409486945294758c136e756d5f6865616c7468795f776f726b657273944b086a310100006a320100006a330100006a3401000075756275626a380100002981947d94286a3b0100004b126810680b2981947d9428680e680f68108c8a2f686f6d652f64616d69616e2f7261795f726573756c74732f636f6f7264696e617465645f747261666669635f6c69676874732f50504f5f436f6f7264696e61746564456e762d76305f38653861656537365f323032312d30342d31315f31352d35302d31375f723570777862612f636865636b706f696e745f31382f636865636b706f696e742d31389468127d94288c12657069736f64655f7265776172645f6d61789447c0895787547779ab8c12657069736f64655f7265776172645f6d696e9447c0b85fa14ed6c21e8c13657069736f64655f7265776172645f6d65616e946819681f4308e197b5a077e698c094869452948c10657069736f64655f6c656e5f6d65616e946819681f43080000000000002e4094869452948c12657069736f6465735f746869735f69746572944b708c11706f6c6963795f7265776172645f6d696e947d948c11706f6c6963795f7265776172645f6d6178947d948c12706f6c6963795f7265776172645f6d65616e947d948c0e637573746f6d5f6d657472696373947d948c0c73616d706c65725f70657266947d94288c106d65616e5f656e765f776169745f6d73946819681f4308a1d7235bb148c24094869452948c126d65616e5f70726f63657373696e675f6d73946819681f43083929cef126ee914094869452948c116d65616e5f696e666572656e63655f6d73946819681f43087d2dc058175e02409486945294758c146f66665f706f6c6963795f657374696d61746f72947d948c04696e666f947d94288c116e756d5f73746570735f747261696e6564944dbe6e8c116e756d5f73746570735f73616d706c6564944d80708c0e73616d706c655f74696d655f6d73946819681f43082b8716e98167404194869452948c0c6c6f61645f74696d655f6d73946819681f4308a01a2fdd2466454094869452948c0c677261645f74696d655f6d73946819681f4308aaf1d24d62d49a4094869452948c0e7570646174655f74696d655f6d73946819681f43085a643bdf4f1d764094869452948c076c6561726e6572947d948c0e64656661756c745f706f6c696379947d94288c0c6375725f6b6c5f636f656666946819681f4308000000a09999e53f94869452948c066375725f6c72946819681f4308000000402aa9333f94869452948c0a746f74616c5f6c6f73739468196865430461378a4994869452948c0b706f6c6963795f6c6f737394681968654304279646be94869452948c0776665f6c6f73739468196865430461378a4994869452948c1076665f6578706c61696e65645f76617294681968654304254912b294869452948c026b6c94681968654304ff4d263d94869452948c07656e74726f7079946819686543047748ba4194869452948c0d656e74726f70795f636f656666946819681f4308000000000000000094869452947573758c1374696d6573746570735f746869735f69746572944d40068c04646f6e6594898c0f74696d6573746570735f746f74616c944d80708c0e657069736f6465735f746f74616c944d80078c12747261696e696e675f697465726174696f6e944b128c0d6578706572696d656e745f6964948c206162363631323937326138613434616261303231616531663334393862313733948c0464617465948c13323032312d30342d31325f30332d30392d3438948c0974696d657374616d70944a7c4973608c1074696d655f746869735f697465725f73944740a1b0da602800008c0c74696d655f746f74616c5f73944740e2e11dc86680008c03706964944a9e6a1d008c08686f73746e616d65948c0e63787465616d2d73616e64626f78948c076e6f64655f6970948c0f3139322e3136382e3132322e313639948c06636f6e666967947d94288c0b6e756d5f776f726b657273944b088c136e756d5f656e76735f7065725f776f726b6572944b018c1173616d706c655f62617463685f73697a65944bc88c0a62617463685f6d6f6465948c117472756e636174655f657069736f646573948c086e756d5f67707573944b008c10747261696e5f62617463685f73697a65944b2d8c056d6f64656c947d94288c0c636f6e765f66696c74657273944e8c0f636f6e765f61637469766174696f6e948c0472656c75948c1066636e65745f61637469766174696f6e948c0474616e68948c0d66636e65745f68696464656e73945d94284b404b404b40658c0c667265655f6c6f675f73746494898c0f6e6f5f66696e616c5f6c696e65617294898c0f76665f73686172655f6c617965727394888c087573655f6c73746d94898c0b6d61785f7365715f6c656e944b148c0e6c73746d5f63656c6c5f73697a65944d00018c1b6c73746d5f7573655f707265765f616374696f6e5f72657761726494898c0b73746174655f7368617065944e8c0a6672616d65737461636b94888c0364696d944b548c09677261797363616c6594898c097a65726f5f6d65616e94888c13637573746f6d5f70726570726f636573736f72944e8c0c637573746f6d5f6d6f64656c944e8c12637573746f6d5f616374696f6e5f64697374944e8c0e637573746f6d5f6f7074696f6e73947d94758c096f7074696d697a6572947d948c0567616d6d6194473feff7ced916872b8c07686f72697a6f6e944b0f8c0c736f66745f686f72697a6f6e94898c0e6e6f5f646f6e655f61745f656e6494898c0a656e765f636f6e666967947d94288c0b666c6f775f706172616d739458da0800007b0a2020202022656e76223a207b0a2020202020202020226164646974696f6e616c5f706172616d73223a207b0a20202020202020202020202022646574656374696f6e5f696e74657276616c223a205b0a20202020202020202020202020202020302c0a2020202020202020202020202020202031352c0a20202020202020202020202020202020300a2020202020202020202020205d2c0a202020202020202020202020226e756d5f616476616e636564223a20312c0a202020202020202020202020226e756d5f696e636f6d696e675f65646765735f7065725f6e6f6465223a20342c0a202020202020202020202020226e756d5f6d65617375726573223a20322c0a202020202020202020202020226e756d5f73746f7062617273223a20332c0a202020202020202020202020226f627365727665645f6e6f646573223a205b0a20202020202020202020202020202020333338362c0a20202020202020202020202020202020333337312c0a20202020202020202020202020202020333336322c0a20202020202020202020202020202020333337330a2020202020202020202020205d2c0a202020202020202020202020227265706c69636174696f6e5f6c697374223a205b0a20202020202020202020202020202020225265706c69636174696f6e2038303530323937222c0a20202020202020202020202020202020225265706c69636174696f6e2038303530333135222c0a20202020202020202020202020202020225265706c69636174696f6e2038303530333232220a2020202020202020202020205d2c0a20202020202020202020202022737461746973746963616c5f696e74657276616c223a205b0a20202020202020202020202020202020302c0a2020202020202020202020202020202031352c0a20202020202020202020202020202020300a2020202020202020202020205d2c0a202020202020202020202020227461726765745f6e6f646573223a205b0a20202020202020202020202020202020333336392c0a20202020202020202020202020202020333334312c0a20202020202020202020202020202020333337302c0a20202020202020202020202020202020333334342c0a20202020202020202020202020202020333332390a2020202020202020202020205d0a20202020202020207d2c0a202020202020202022636c69705f616374696f6e73223a20747275652c0a2020202020202020226576616c75617465223a2066616c73652c0a202020202020202022686f72697a6f6e223a2031363837342c0a20202020202020202273696d735f7065725f73746570223a20313132352c0a2020202020202020227761726d75705f7374657073223a20310a202020207d2c0a2020202022656e765f6e616d65223a2022636f6f7264696e617465645f6c69676874732e436f6f7264696e61746564456e76222c0a20202020226578705f746167223a2022636f6f7264696e617465645f747261666669635f6c6967687473222c0a2020202022696e697469616c223a207b0a2020202020202020226164646974696f6e616c5f706172616d73223a207b7d2c0a20202020202020202262756e6368696e67223a20302c0a20202020202020202265646765735f646973747269627574696f6e223a2022616c6c222c0a2020202020202020226c616e65735f646973747269627574696f6e223a20496e66696e6974792c0a2020202020202020226d696e5f676170223a20302c0a202020202020202022706572747572626174696f6e223a20302e302c0a20202020202020202273687566666c65223a2066616c73652c0a20202020202020202273706163696e67223a2022756e69666f726d222c0a2020202020202020227830223a20300a202020207d2c0a20202020226e6574223a207b0a2020202020202020226164646974696f6e616c5f706172616d73223a207b7d2c0a202020202020202022696e666c6f7773223a207b0a202020202020202020202020225f496e466c6f77735f5f666c6f7773223a205b5d0a20202020202020207d2c0a2020202020202020226f736d5f70617468223a206e756c6c2c0a20202020202020202274656d706c617465223a20222f686f6d652f64616d69616e2f666c6f772f6578616d706c65732f61696d73756e2f747261666669635f6c696768745f636f6f7264696e6174696f6e2f7363656e6172696f5f6f6e655f686f75722e616e67220a202020207d2c0a20202020226e6574776f726b223a2022636f6f7264696e617465645f6c69676874732e436f6f7264696e617465644e6574776f726b222c0a202020202273696d223a207b0a20202020202020202263656e74726f69645f636f6e6669675f6e616d65223a202243656e74726f696420436f6e66696775726174696f6e2038303430363532222c0a202020202020202022636f6c6f725f76656869636c6573223a20747275652c0a202020202020202022656d697373696f6e5f70617468223a206e756c6c2c0a2020202020202020226578706572696d656e745f6e616d65223a20224d6963726f20535243204578706572696d656e7420383637222c0a2020202020202020226e6574776f726b5f6e616d65223a202244796e616d6963205363656e6172696f20383636222c0a2020202020202020227078706d223a20322c0a20202020202020202272656e646572223a2066616c73652c0a2020202020202020227265706c69636174696f6e5f6e616d65223a20225265706c69636174696f6e2038303530323937222c0a202020202020202022726573746172745f696e7374616e6365223a2066616c73652c0a202020202020202022736176655f72656e646572223a2066616c73652c0a20202020202020202273686f775f726164697573223a2066616c73652c0a20202020202020202273696768745f726164697573223a2032352c0a20202020202020202273696d5f73746570223a20302e382c0a2020202020202020227375626e6574776f726b5f6e616d65223a206e756c6c0a202020207d2c0a202020202273696d756c61746f72223a202261696d73756e222c0a2020202022766568223a205b5d0a7d948c0372756e948c0350504f94758c03656e76948c11436f6f7264696e61746564456e762d7630948c0c636c69705f72657761726473944e8c0c636c69705f616374696f6e7394898c1170726570726f636573736f725f70726566948c08646565706d696e64948c026c7294473f33a92a305532618c076d6f6e69746f7294898c096c6f675f6c6576656c948c045741524e948c0963616c6c6261636b73947d94288c106f6e5f657069736f64655f7374617274944e8c0f6f6e5f657069736f64655f73746570944e8c0e6f6e5f657069736f64655f656e64944e8c0d6f6e5f73616d706c655f656e64944e8c0f6f6e5f747261696e5f726573756c74944e8c136f6e5f706f737470726f636573735f7472616a944e758c1669676e6f72655f776f726b65725f6661696c7572657394898c0d6c6f675f7379735f757361676594888c05656167657294898c0d65616765725f74726163696e6794898c136e6f5f65616765725f6f6e5f776f726b65727394898c136576616c756174696f6e5f696e74657276616c944e8c176576616c756174696f6e5f6e756d5f657069736f646573944b0a8c116576616c756174696f6e5f636f6e666967947d948c0c73616d706c655f6173796e6394898c126f62736572766174696f6e5f66696c746572948c084e6f46696c746572948c1373796e6368726f6e697a655f66696c7465727394888c0f74665f73657373696f6e5f61726773947d94288c1c696e7472615f6f705f706172616c6c656c69736d5f74687265616473944b028c1c696e7465725f6f705f706172616c6c656c69736d5f74687265616473944b028c0b6770755f6f7074696f6e73947d948c0c616c6c6f775f67726f7774689488738c146c6f675f6465766963655f706c6163656d656e7494898c0c6465766963655f636f756e74947d948c03435055944b01738c14616c6c6f775f736f66745f706c6163656d656e749488758c156c6f63616c5f74665f73657373696f6e5f61726773947d94286a140300004b086a150300004b08758c15636f6d70726573735f6f62736572766174696f6e7394898c17636f6c6c6563745f6d6574726963735f74696d656f7574944bb48c1a6d6574726963735f736d6f6f7468696e675f657069736f646573944b648c1272656d6f74655f776f726b65725f656e767394898c1872656d6f74655f656e765f62617463685f776169745f6d73944b008c0f6d696e5f697465725f74696d655f73944b008c1774696d6573746570735f7065725f697465726174696f6e944b008c0473656564944e8c136e756d5f637075735f7065725f776f726b6572944b018c136e756d5f677075735f7065725f776f726b6572944b008c1b637573746f6d5f7265736f75726365735f7065725f776f726b6572947d948c136e756d5f637075735f666f725f647269766572944b018c066d656d6f7279944b008c136f626a6563745f73746f72655f6d656d6f7279944b008c116d656d6f72795f7065725f776f726b6572944b008c1e6f626a6563745f73746f72655f6d656d6f72795f7065725f776f726b6572944b008c05696e707574948c0773616d706c6572948c10696e7075745f6576616c756174696f6e945d94288c026973948c0377697394658c12706f737470726f636573735f696e7075747394898c1373687566666c655f6275666665725f73697a65944b008c066f7574707574944e8c176f75747075745f636f6d70726573735f636f6c756d6e73945d94288c036f6273948c076e65775f6f627394658c146f75747075745f6d61785f66696c655f73697a65944a000000048c0a6d756c74696167656e74947d94288c08706f6c6963696573947d948c11706f6c6963795f6d617070696e675f666e944e8c11706f6c69636965735f746f5f747261696e944e758c077573655f67616594888c066c616d62646194473fef0a3d70a3d70a8c086b6c5f636f65666694473fc999999999999a8c127367645f6d696e6962617463685f73697a65944b2d8c1173687566666c655f73657175656e63657394888c0c6e756d5f7367645f69746572944b0a8c0b6c725f7363686564756c65944e6ad8020000898c0d76665f6c6f73735f636f65666694473ff00000000000008c0d656e74726f70795f636f656666944700000000000000008c16656e74726f70795f636f6566665f7363686564756c65944e8c0a636c69705f706172616d94473fd33333333333338c0d76665f636c69705f706172616d944740240000000000008c09677261645f636c6970944e8c096b6c5f74617267657494473f947ae147ae147b8c1073696d706c655f6f7074696d697a65729489758c1274696d655f73696e63655f726573746f7265944740d2eab12dbf00008c1774696d6573746570735f73696e63655f726573746f7265944d40388c18697465726174696f6e735f73696e63655f726573746f7265944b098c0470657266947d94288c106370755f7574696c5f70657263656e74946819681f4308ceca69c5a72c554094869452948c1072616d5f7574696c5f70657263656e74946819681f43083d987a4f3f3951409486945294758c136e756d5f6865616c7468795f776f726b657273944b086a310100006a320100006a330100006a3401000075756275626a380100002981947d94286a3b0100004b136810680c7562658c0b5f6d656d62657273686970948f94286a3c010000680c6a500200009075622e"
+      },
+      "export_formats": [],
+      "status": "RUNNING",
+      "start_time": 1618127417.2085505,
+      "logdir": "/home/damian/ray_results/coordinated_traffic_lights/PPO_CoordinatedEnv-v0_8e8aee76_2021-04-11_15-50-17_r5pwxba",
+      "runner": null,
+      "result_logger": null,
+      "last_debug": 1618170462.4071152,
+      "error_file": null,
+      "error_msg": null,
+      "num_failures": 0,
+      "custom_trial_name": null,
+      "results": "80044e2e",
+      "best_result": "80044e2e",
+      "param_config": "80044e2e",
+      "extra_arg": "80044e2e",
+      "_nonjson_fields": [
+        "checkpoint",
+        "loggers",
+        "sync_to_driver_fn",
+        "results",
+        "best_result",
+        "param_config",
+        "extra_arg"
+      ],
+      "checkpoint": "80044e2e",
+      "__logger_started__": true
+    }
+  ],
+  "runner_data": {
+    "_global_time_limit": Infinity,
+    "_total_time": 40939.23446774483,
+    "_iteration": 19,
+    "_verbose": true,
+    "_server_port": 4321,
+    "_local_checkpoint_dir": "/home/damian/ray_results/coordinated_traffic_lights",
+    "_remote_checkpoint_dir": null,
+    "_resumed": true,
+    "checkpoint_file": "/home/damian/ray_results/coordinated_traffic_lights/experiment_state-2021-04-11_21-45-54.json",
+    "_session_str": "2021-04-11_21-45-54",
+    "_start_time": 1618148754.8963563,
+    "_last_checkpoint_time": 1618170462.4308326,
+    "_checkpoint_period": 10,
+    "launch_web_server": false
+  },
+  "stats": {
+    "start_time": 1618148754.8963563,
+    "timestamp": 1618170462.4308326
+  }
+}

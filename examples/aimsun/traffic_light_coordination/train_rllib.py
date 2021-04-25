@@ -120,7 +120,7 @@ if __name__ == "__main__":
             "stop": {
                 "training_iteration": RLLIB_TRAINING_ITERATIONS,
             },
-            "restore": '/home/damian/ray_results/coordinated_traffic_lights/PPO_CoordinatedEnv-v0_f4b00bfe_2021-04-20_22-30-29qefplejm/checkpoint_119/checkpoint-119',	
+            "restore": '/home/damian/ray_results/coordinated_traffic_lights/PPO_CoordinatedEnv-v0_8c978b7c_2021-04-24_13-40-164aitvjug/checkpoint_12/checkpoint-12',	
             # "local_dir": os.path.abspath("./ray_results"),
             "keep_checkpoints_num": 3
         }
