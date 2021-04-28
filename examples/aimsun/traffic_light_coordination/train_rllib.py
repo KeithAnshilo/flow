@@ -19,7 +19,7 @@ except ImportError:
 SIM_STEP = 0.8  # copy to run.py
 
 # hardcoded to AIMSUN's statistics update interval (5 minutes)
-DETECTOR_STEP = 1800  # copy to run.py #K:changed from 5 minuts to 15 mins
+DETECTOR_STEP = 900  # copy to run.py #K:changed from 5 minuts to 15 mins
 
 TIME_HORIZON = 3600*4 - DETECTOR_STEP  # 14,100 #K: 13,500
 HORIZON = int(TIME_HORIZON//SIM_STEP)
@@ -88,7 +88,7 @@ def setup_exps(version=0):
     config["horizon"] = RLLIB_HORIZON  # not same as env horizon.
     #config["vf_loss_coeff"] = 1e-8
     #config["vf_clip_param"] = 600
-    config["lr"] = 3e-4
+    config["lr"] = 5e-4
 
     # save the flow params for replay
     flow_json = json.dumps(
@@ -120,8 +120,8 @@ if __name__ == "__main__":
             "stop": {
                 "training_iteration": RLLIB_TRAINING_ITERATIONS,
             },
-            "restore": '/home/damian/ray_results/coordinated_traffic_lights/PPO_CoordinatedEnv-v0_8c978b7c_2021-04-24_13-40-164aitvjug/checkpoint_12/checkpoint-12',	
+            #"restore": '/home/damian/ray_results/coordinated_traffic_lights/PPO_CoordinatedEnv-v0_8c978b7c_2021-04-24_13-40-164aitvjug/checkpoint_12/checkpoint-12',	
             # "local_dir": os.path.abspath("./ray_results"),
             "keep_checkpoints_num": 3
         }
-    }, resume=True)
+    }, resume=False)

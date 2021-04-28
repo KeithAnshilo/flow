@@ -10,8 +10,8 @@ ADDITIONAL_ENV_PARAMS = {'target_nodes': [3369, 3341, 3370, 3344, 3329],
                          'num_stopbars': 3,
                          'num_advanced': 1,
                          'num_measures': 2,
-                         'detection_interval': (0, 30, 0),
-                         'statistical_interval': (0, 30, 0),
+                         'detection_interval': (0, 15, 0),
+                         'statistical_interval': (0, 15, 0),
                          'replication_list': ['Replication 8050297',  # 5-11
                                               'Replication 8050315',  # 10-14
                                               'Replication 8050322']}  # 14-21
